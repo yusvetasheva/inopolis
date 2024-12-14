@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         // Создание контекста Spring и загрузка конфигурации
         ApplicationContext context = new AnnotationConfigApplicationContext(JdbcTemplateConfig.class);
-// Получение AddressRepository из контекста
+
         AddressRepository addressRepository = context.getBean(AddressRepository.class);
 
         List<Address> addresses = addressRepository.getAllAddresses();
