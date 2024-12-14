@@ -14,31 +14,27 @@ public class AddressRepository {
 
     @Autowired
     private  JdbcTemplate jdbcTemplate;
-    // Метод для получения всех адресов
+
     public List<Address> getAllAddresses() {
         String sql = "SELECT * FROM address";
         return jdbcTemplate.query(sql, new AddressRowMapper());
     }
 
-    // Метод для добавления нового адреса
     public void addAddress(Address address) {
         String sql = "INSERT INTO address (city, street, number_of_build) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, address.getCity(), address.getStreet(), address.getNumberOfBuild());
     }
 
-    // Метод для получения адреса по ID
     public Address getAddressById(int id) {
         String sql = "SELECT * FROM address WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new AddressRowMapper());
     }
 
-    // Метод для обновления адреса
     public void updateAddress(Address address) {
         String sql = "UPDATE address SET city = ?, street = ?, number_of_build = ? WHERE id = ?";
         jdbcTemplate.update(sql, address.getCity(), address.getStreet(), address.getNumberOfBuild(), address.getId());
     }
 
-    // Метод для удаления адреса
     public void deleteAddress(int id) {
         String sql = "DELETE FROM address WHERE id = ?";
         jdbcTemplate.update(sql, id);
