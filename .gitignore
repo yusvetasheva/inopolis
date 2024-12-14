@@ -1,0 +1,21 @@
+.idea/.gitignore
+.idea/compiler.xml
+.idea/encodings.xml
+.idea/jarRepositories.xml
+.idea/misc.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+target/classes/org/example/App.class
+target/classes/org/example/Product.class
+target/classes/repository/AddressRepository$AddressRowMapper.class
+target/classes/repository/AddressRepository.class
+target/maven-archiver/pom.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+target/delete-1.0-SNAPSHOT.jar
+target/classes/Main.class
+target/classes/config/JdbcTemplateConfig.class
+target/classes/model/Address.class
+.idea/inipolist git.iml
