@@ -2,17 +2,17 @@ import config.JdbcTemplateConfig;
 import model.Address;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.ApplicationContext;
-import repository.AddressRepository;
+import repository.AddressRepositoryImpl;
 
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        // Создание контекста Spring и загрузка конфигурации
+
         ApplicationContext context = new AnnotationConfigApplicationContext(JdbcTemplateConfig.class);
-// Получение AddressRepository из контекста
-        AddressRepository addressRepository = context.getBean(AddressRepository.class);
+
+        AddressRepositoryImpl addressRepository = context.getBean(AddressRepositoryImpl.class);
 
         // Получаем все адреса
         List<Address> addresses = addressRepository.getAllAddresses();

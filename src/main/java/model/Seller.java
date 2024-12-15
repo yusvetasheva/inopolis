@@ -10,10 +10,12 @@ import org.springframework.data.relational.core.mapping.Column;
 @AllArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Address {
+public class Seller {
     int id;
-    String city;
-    String street;
-    @Column("number_of_build")
-    String numberOfBuild;
+    String fio;
+    @Column("cust_position")
+    String custPosition;
+    @Column("store_id")
+    Integer storeId;
+    Integer salary;
 }
