@@ -4,8 +4,11 @@ import model.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,7 +27,19 @@ public class StoreRepositoryImpl implements StoreRepository {
     @Override
     public void addStore(Store store) {
         String sql = "INSERT INTO store (address_id, capacity, fullness) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, store.getAddressId(), store.getCapacity(), store.getFullness());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps =  con.prepareStatement(sql, new String[] {"id"});
+            ps.setInt(1, store.getAddressId());
+            ps.setInt(2, store.getCapacity());
+            ps.setInt(3, store.getFullness());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            store.setId(keyHolder.getKey().intValue());
+        }
     }
 
     @Override

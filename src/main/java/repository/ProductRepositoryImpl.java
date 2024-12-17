@@ -5,8 +5,11 @@ import model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -24,7 +27,20 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void addProduct(Product product) {
         String sql = "INSERT INTO product (product_name, description, shop_id) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, product.getProductName(), product.getDescription(), product.getShopId());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection->{
+            PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, product.getProductName());
+            ps.setString(2, product.getDescription());
+            ps.setInt(3, product.getShopId());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            product.setId(keyHolder.getKey().intValue());
+        }
     }
 
     @Override
@@ -46,7 +62,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                     rs.getInt("id"),
                     rs.getString("product_name"),
                     rs.getString("description"),
-                    rs.getInt("shopId"));
+                    rs.getInt("shop_id"));
         }
     }
 }

@@ -12,9 +12,13 @@ import org.springframework.data.relational.core.mapping.Column;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Product {
     int id;
-    @Column("product_name")
     String productName;
     String description;
-    @Column("shop_id")
     Integer shopId;
+
+    public Product(String productName, String description, Integer shopId){
+        this.productName = productName;
+        this.description = description;
+        this.shopId = shopId;
+    }
 }

@@ -1,12 +1,14 @@
 package repository;
 
-import model.Address;
 import model.Shop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -26,7 +28,19 @@ public class ShopRepositoryImpl implements ShopRepository {
     @Override
     public void addShop(Shop shop) {
         String sql = "INSERT INTO shop (address_id, store_id, shop_name) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, shop.getAddressId(), shop.getStoreId(), shop.getShopName());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(con -> {
+            PreparedStatement st = con.prepareStatement(sql, new String[] {"id"});
+            st.setInt(1, shop.getAddressId());
+            st.setInt(2, shop.getStoreId());
+            st.setString(3, shop.getShopName());
+            return st;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            shop.setId(keyHolder.getKey().intValue());
+        }
     }
 
     @Override

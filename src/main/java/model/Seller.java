@@ -13,9 +13,14 @@ import org.springframework.data.relational.core.mapping.Column;
 public class Seller {
     int id;
     String fio;
-    @Column("cust_position")
     String custPosition;
-    @Column("store_id")
     Integer storeId;
     Integer salary;
+
+    public Seller(String fio, String custPosition, Integer storeId, Integer salary) {
+        this.fio = fio;
+        this.custPosition = custPosition;
+        this.storeId = storeId;
+        this.salary = salary;
+    }
 }

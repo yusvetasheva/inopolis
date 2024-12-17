@@ -2,7 +2,6 @@ package model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.relational.core.mapping.Column;
 
 @Getter
 @Setter
@@ -14,6 +13,11 @@ public class Address {
     int id;
     String city;
     String street;
-    @Column("number_of_build")
     String numberOfBuild;
+
+    public Address (String city, String street, String numberOfBuild){
+        this.city =city;
+        this.street = street;
+        this.numberOfBuild = numberOfBuild;
+    }
 }

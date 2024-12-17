@@ -3,9 +3,14 @@ package repository;
 import model.Seller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
+@Repository
 public class SellerRepositoryImpl implements SellerRepository {
 
     @Autowired
@@ -20,7 +25,21 @@ public class SellerRepositoryImpl implements SellerRepository {
     @Override
     public void addSeller(Seller seller) {
         String sql = "INSERT INTO seller (fio, cust_position, store_id, salary) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, seller.getFio(), seller.getCustPosition(), seller.getStoreId(), seller.getSalary());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, seller.getFio());
+            ps.setString(2, seller.getCustPosition());
+            ps.setInt(3, seller.getStoreId());
+            ps.setInt(4, seller.getSalary());
+            return ps;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            seller.setId(keyHolder.getKey().intValue());
+        }
     }
 
     @Override
