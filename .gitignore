@@ -37,3 +37,4 @@ target/classes/repository/ShopRepositoryImpl.class
 target/classes/repository/StoreRepository.class
 target/classes/repository/StoreRepositoryImpl$StoreRowMap.class
 target/classes/repository/StoreRepositoryImpl.class
+.idea/runConfigurations.xml
