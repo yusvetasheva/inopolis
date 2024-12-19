@@ -1,6 +1,6 @@
-package repository;
+package com.example.repository;
 
-import model.Address;
+import com.example.model.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -54,6 +54,9 @@ public class AddressRepositoryImpl implements AddressRepository {
     public void deleteAddress(int id) {
         String sql = "DELETE FROM address WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
     }
 
     private static class AddressRowMapper implements RowMapper<Address> {

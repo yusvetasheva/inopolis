@@ -1,6 +1,6 @@
-package repository;
+package com.example.repository;
 
-import model.Seller;
+import com.example.model.Seller;
 
 import java.util.List;
 

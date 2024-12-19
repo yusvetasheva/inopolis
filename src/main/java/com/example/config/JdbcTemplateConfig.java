@@ -1,4 +1,4 @@
-package config;
+package com.example.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
-@ComponentScan(basePackages = "repository")
+@ComponentScan(basePackages = "com/example/repository")
 public class JdbcTemplateConfig {
     @Bean
     public JdbcTemplate jdbcTemplate() {

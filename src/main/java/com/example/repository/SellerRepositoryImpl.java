@@ -1,6 +1,6 @@
-package repository;
+package com.example.repository;
 
-import model.Seller;
+import com.example.model.Seller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,6 +15,7 @@ public class SellerRepositoryImpl implements SellerRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
 
     @Override
     public List<Seller> getAllSellers() {

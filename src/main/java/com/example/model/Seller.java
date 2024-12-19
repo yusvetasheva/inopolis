@@ -1,4 +1,4 @@
-package model;
+package com.example.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,15 +10,17 @@ import org.springframework.data.relational.core.mapping.Column;
 @AllArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Shop {
+public class Seller {
     int id;
-    Integer addressId;
+    String fio;
+    String custPosition;
     Integer storeId;
-    String shopName;
+    Integer salary;
 
-    public Shop (Integer addressId, Integer storeId, String shopName){
-        this.addressId = addressId;
+    public Seller(String fio, String custPosition, Integer storeId, Integer salary) {
+        this.fio = fio;
+        this.custPosition = custPosition;
         this.storeId = storeId;
-        this.shopName = shopName;
+        this.salary = salary;
     }
 }

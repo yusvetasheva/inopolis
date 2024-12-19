@@ -1,6 +1,6 @@
-package repository;
+package com.example.repository;
 
-import model.Shop;
+import com.example.model.Shop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
