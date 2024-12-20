@@ -1,95 +1,130 @@
 package com.example;
 
-import com.example.config.JdbcTemplateConfig;
-import com.example.model.Address;
-import com.example.model.Product;
-import com.example.model.Seller;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.ApplicationContext;
-import com.example.repository.AddressRepositoryImpl;
-import com.example.repository.ProductRepositoryImpl;
-import com.example.repository.SellerRepositoryImpl;
-
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Good job");
+        /**Задание 1*/
+
+        // Из массива в список
+        Integer[] intArray = {1, 2, 6, 8, 3, 5, 9, 0, 0};
+        List<Integer> intList = Arrays.asList(intArray);
+        System.out.println("Из массива в список");
+        intList.forEach(System.out::println);
+
+        //Прямая сортировка
+        Collections.sort(intList);
+        System.out.println("Прямая сортировка");
+        intList.forEach(System.out::println);
+
+        //Обратная сортировка
+        intList.sort(Collections.reverseOrder());
+        System.out.println("Обратная сортировка");
+        intList.forEach(System.out::println);
+
+        //Перемешиваем
+        Collections.shuffle(intList);
+        System.out.println("Перемешиваем");
+        intList.forEach(System.out::println);
+
+        //Циклический сдвиг на 1
+        Collections.rotate(intList, 1);
+        System.out.println("Циклический сдвиг на 1");
+        intList.forEach(System.out::println);
+
+        //Только уникальные элементы
+        Set<Integer> setInt = new HashSet<>(intList);
+        System.out.println("Только уникальные элементы");
+        setInt.forEach(System.out::println);
+
+        //только дублирующиеся объекты
+        //key - само число, значение - количество повторений
+        Map<Integer, Integer> mapForDublicates = new HashMap<>();
+        intList.forEach(i -> {
+            if (mapForDublicates.get(i) == null) mapForDublicates.put(i, 1);
+            else {
+                Integer count = mapForDublicates.get(i) + 1;
+                mapForDublicates.put(i, count);
+            }
+        });
+
+        List<Integer> result = new ArrayList<>();
+        for (Integer key : mapForDublicates.keySet()) {
+            if (mapForDublicates.get(key) > 1)
+                result.add(key);
+        }
+        System.out.println("Только дублирующиеся элементы");
+        result.forEach(System.out::println);
+
+        //Из массива список
+        List<Integer> listFromArray = List.of(intArray);
+        System.out.println("Из массива список");
+        listFromArray.forEach(System.out::println);
+
+        /**Задание 2*/
+        //добавили 10 элементов
+        HashSet<String> hashSet = new HashSet<>();
+        hashSet.add("1");
+        hashSet.add("10");
+        hashSet.add("11");
+        hashSet.add("12");
+        hashSet.add("13");
+        hashSet.add("14");
+        hashSet.add("15");
+        hashSet.add("16");
+        hashSet.add("17");
+        hashSet.add("18");
+
+        System.out.println("Создали и заполнили HashSet");
+        hashSet.forEach(System.out::println);
+
+
+        //Добавили пять объектов, совместимые со String
+        hashSet.add(String.valueOf(199));
+        hashSet.add(LocalDate.now().toString());
+        hashSet.add(BigDecimal.TEN.toString());
+        hashSet.add(String.valueOf('8'));
+        hashSet.add(String.valueOf(19f));
+
+        System.out.println("Добавили пять объектов, совместимые со String");
+        hashSet.forEach(System.out::println);
+
+        //Выводим через for
+        System.out.println("Выводим все через for");
+        for (String i : hashSet){
+            System.out.println(i);
+        }
+
+        // Добавили уже существующий элемент
+        // Он не добавился
+        hashSet.add("16");
+        System.out.println("Добавили элемент, который уже есть");
+        hashSet.forEach(System.out::println);
+
+        //Удалям из коллекции элемент
+        hashSet.remove("1");
+        System.out.println("Удалили единицу");
+        hashSet.forEach(System.out::println);
+
+        //Количество элементов
+        System.out.println("Количество элементов: " + hashSet.size());
+
+        //Удаляем все элементы
+        hashSet.clear();
+        System.out.println("Удаляем все элементы: " + hashSet.size());
+
+        //Проверяем является ли hashSet пустым
+        System.out.println("Коллекция пустая? - " + hashSet.isEmpty());
+
+
+
+
     }
 
-//        ApplicationContext context = new AnnotationConfigApplicationContext(JdbcTemplateConfig.class);
-//
-//        AddressRepositoryImpl addressRepository = context.getBean(AddressRepositoryImpl.class);
-//        ProductRepositoryImpl productRepository = context.getBean(ProductRepositoryImpl.class);
-//        SellerRepositoryImpl sellerRepository = context.getBean(SellerRepositoryImpl.class);
-//
-//
-//        /**Адреса*/
-//        // Получаем все адреса
-//        List<Address> addresses = addressRepository.getAllAddresses();
-//        for (Address address : addresses) {
-//            System.out.println(address);
-//        }
-//
-//        // Добавляем новый адрес
-//        Address newAddress = new Address( "Moscow", "Tverskaya", "10");
-//        addressRepository.addAddress(newAddress);
-//
-//        // Получаем адрес по ID
-//        Address address = addressRepository.getAddressById(41);
-//        System.out.println("Address with ID 41: " + address);
-//
-//        // Обновляем адрес
-//        address.setCity("Saint Petersburg");
-//        addressRepository.updateAddress(address);
-//
-//        // Удаляем адрес
-//        addressRepository.deleteAddress(2);
-//
-//        /**Товары*/
-//
-//        // Добавляем новый адрес
-//        Product newProduct = new Product("Matebook", "ochen dorogo", 21);
-//        productRepository.addProduct(newProduct);
-//
-//        Product newProduct2 = new Product( "delete", "delete", 21);
-//        productRepository.addProduct(newProduct);
-//
-//        // Обновляем адрес
-//        newProduct.setDescription("ochen dorogo + 100");
-//        productRepository.updateProduct(newProduct);
-//
-//        // Удаляем адрес
-//        productRepository.deleteProduct(newProduct2.getId());
-//
-//        // Получаем все адреса
-//        List<Product> products = productRepository.getAllProducts();
-//        for (Product product : products) {
-//            System.out.println(product);
-//        }
-//
-//        /**Продавцы*/
-//
-//        // Добавляем новый адрес
-//        Seller newSeller = new Seller("Oled AB", "seller", 42, 40000);
-//        sellerRepository.addSeller(newSeller);
-//
-//        Seller newSeller2 = new Seller("delete", "delete", 42, 0);
-//        sellerRepository.addSeller(newSeller2);
-//
-//        // Обновляем адрес
-//        newSeller.setSalary(5000);
-//        sellerRepository.updateSeller(newSeller);
-//
-//        // Удаляем адрес
-//        sellerRepository.deleteSeller(newSeller2.getId());
-//
-//        // Получаем все адреса
-//        List<Seller> sellers = sellerRepository.getAllSellers();
-//        for (Seller seller : sellers) {
-//            System.out.println(seller);
-//        }
-//    }
 }
