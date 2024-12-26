@@ -1,9 +1,9 @@
 services:
   app:
-    image: list-app
+    image: hash
     build:
-      context: . # Путь к папке, где находится Dockerfile
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    command: -java -jar write-read-app.jar
+    command: -java -jar hash.jar

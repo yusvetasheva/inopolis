@@ -1,0 +1,2 @@
+{"orange":1}, {"apple":2}, {"raspberry":10}, {"peach":0}, {"banana":8}, {"watermelon":9}, {"lemon":3}, {strawberry":15}
+{"guava":7}, {"coconut":11}
