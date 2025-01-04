@@ -1,28 +1,39 @@
 package com.example;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
-
-import java.io.*;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
-    @SneakyThrows
+
     public static void main(String[] args) {
-        Person person = new Person(List.of(new Address(1, "Moscow")), "124", "201@mail.ru");
 
-        //JSON serial
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonPerson = mapper.writeValueAsString(person);
+        String input = "Hello world! Hello Java. Java is fun.";
+        //[Hello=2, Java=2, is=1, fun=1, world=1]
 
-        Person newPersom = mapper.readValue(jsonPerson, Person.class);
+        String [] array = input.replace("!","").replace(".", "").toLowerCase().split(" ");
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter("json.txt"));
-        writer.write(jsonPerson);
-        writer.close();
+        Map<String, Integer> map = Stream.of(array).collect(
+                Collectors.toMap(
+                        i->i,
+                        i->1,
+                        Integer::sum
+                )
+        );
 
-        System.out.println(newPersom);
+        // Сортировка по значению в порядке убывания
+        Map<String, Integer> sortedMap  = map.entrySet().stream()
+                        .sorted((e1, e2)->e2.getValue().compareTo(e1.getValue()))
+                                .collect(Collectors.toMap(
+                                        Map.Entry::getKey,
+                                        Map.Entry::getValue,
+                                        (oldValue, newValue)->oldValue,
+                                        LinkedHashMap::new
+                                ));
+
+        sortedMap.forEach((k,v)->System.out.println(k + " " + v.toString()));
+
+
     }
 }
