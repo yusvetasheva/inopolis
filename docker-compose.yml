@@ -1,6 +1,6 @@
 services:
   app:
-    image: app
+    image: attestation
     build:
       context: . # Путь к папке, где находится Dockerfile
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
-    command: -java -jar app.jar
+    command: -java -jar attestation.jar
 
   postgres:
     image: postgres:13
