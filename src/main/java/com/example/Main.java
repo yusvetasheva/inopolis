@@ -9,38 +9,92 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //Задан массив целых чисел от 1 до 100.
-        // В этом массиве есть дубликаты. Задача: найти все дубликаты и указать их количество.
-        // Например 1, 2, 3, 4, 4, 5, 6, 7, 7, 7 4 — 2 штуки, 7 — 3 штуки.
+        change();
+    }
 
-        int[] array = new int[]{1, 1, 2, 3, 4, 4, 5, 6, 6, 7, 8, 8, 8, 8};
+    // Напишите программу на Java для того, чтобы поменять местами значения,
+    // хранящиеся в двух переменных с помощью третьей переменной
+    public static void change(){
+        Scanner scanner = new Scanner(System.in);
+        int a = scanner.nextInt();
+        int b = scanner.nextInt();
+        int temp;
+        //меняем
+        temp = a;
+        a = b;
+        b=temp;
+        System.out.println("a = " + String.valueOf(a) + ", b = " + String.valueOf(b));
+    }
 
-        //key - num, value - iter
-        Map<Integer, Integer> map = Arrays.stream(array)
-                .boxed()
-                .collect(Collectors.toMap(
-                        i -> i,
-                        i -> 1,
-                        Integer::sum
-                ));
+    //Напишите программу на Java для переворота последовательности символов в строке
+    // без использования встроенной в String функции reverse()
+    public static void myReverce1(String input){
+        String[] array = input.split("");
+        Deque<String> deq = new ArrayDeque<>();
+        for (String i: array){
+            deq.push(i);
+        }
+        String result = String.join("", deq);
+        System.out.println(result);
 
-        map.forEach((k,v)->System.out.println(k + " = " + v));
+    }
 
-        map.forEach((k,v)-> {
-            if (v>1){
-                System.out.println(k + " - " + v + " штуки");
+    //Напишите программу на Java для переворачивания строки,
+    // изменив расположение символов в строке задом наперёд без использования встроенных в String функций
+    public static void myReverve(String input){
+        StringBuilder str = new StringBuilder(input);
+        System.out.println(str.reverse());
+    }
+
+    //Из массива целых чисел, надо найти подмассив с наибольшей суммой и вернуть её сумму.
+    //       Например:
+    // Ввод: [-2,1,-3,4,-1,2,1,-5,4]
+    // Подмассив [4,-1,2,1] имеет наибольшую сумму 6.
+    // Вывод: 6
+    public static Integer getSum(Integer [] input){
+        if (input==null || input.length==0) return 0;
+
+        Integer max = 0;
+        Integer curr = 0;
+
+        for (int i=0; i<input.length; i++){
+            curr+=input[i];
+            if (curr>max){
+                max = curr;
             }
-        });
-
-        Map <Integer, Integer> other = Arrays.stream(array)
-                .boxed()
-                .collect(Collectors.groupingBy(
-                        i->i,
-                        Collectors.summingInt(i->1)
-                ));
+            else if (curr<0) curr = 0;
+        }
+        return  max;
+    }
 
 
+    //Дан массив целых чисел, отсортированный по возрастанию,
+    // верните массив квадратов каждого числа, отсортированный по возрастанию.
+    //Ввод: [-7,-3,2,3,11]
+    //Вывод: [4,9,9,49,121]
+    public static Integer[] getSquare(Integer[] input) {
+        Integer[] result = Arrays.stream(input).map(i -> Math.abs(i)).sorted().map(i -> i * i).toArray(Integer[]::new);
+        Arrays.stream(result).forEach(System.out::println);
+        return result;
+    }
 
+    //Есть строка «Привет, Кккккатовццццы!»,
+    // надо избавиться от дубликатов и вывести «Привет, Катовцы!».
+    public static StringBuilder deleteDublicate(String input) {
+        StringBuilder str = new StringBuilder();
+
+        char[] sighs = input.toCharArray();
+        char prev = sighs[0];
+        str.append(prev);
+
+        for (int i = 1; i < sighs.length; i++) {
+            if (Character.toLowerCase(prev) != Character.toLowerCase(sighs[i])) {
+                str.append(sighs[i]);
+                prev = sighs[i];
+            }
+        }
+
+        return str;
     }
 
     //Сделать первую букву каждого слова заглавной
