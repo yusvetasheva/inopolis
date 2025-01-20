@@ -8,7 +8,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,6 +17,17 @@ public class Main {
     public static void main(String[] args) {
 
         isRepeat();
+    }
+
+    //Найти все дубликаты в массиве
+    public static void findD() {
+        int[] a = new int[]{1, 2, 3, 4, 5, 6, 5, 4, 3};
+        Map<Integer, Integer> map = Arrays.stream(a).boxed().collect(
+                Collectors.toMap(
+                        i -> i,
+                        i -> 1,
+                        Integer::sum
+                ));
     }
 
     //Напишите Java-программу, чтобы найти второе по величине число в массиве.
