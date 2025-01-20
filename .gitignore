@@ -37,3 +37,5 @@ target/classes/repository/ShopRepositoryImpl.class
 target/classes/repository/StoreRepository.class
 target/classes/repository/StoreRepositoryImpl$StoreRowMap.class
 target/classes/repository/StoreRepositoryImpl.class
+target/classes/Main$1.class
+target/classes/MyEnum.class
