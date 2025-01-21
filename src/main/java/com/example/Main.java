@@ -17,10 +17,82 @@ public class Main {
 
     public static void main(String[] args) {
 
-        isRepeat();
+        delenie();
+    }
+
+    //написать код, который выводит числа от 0 до 1000, которые делятся на 3, но не делятся на 5,
+    // и сумма цифр в которых меньше десяти.
+    public static void delenie(){
+        for (int i=0; i<1001; i++){
+            Integer sum = Stream.of(String.valueOf(i).split(""))
+                    .map(Integer::parseInt)
+                    .reduce(Integer::sum).orElse(0);
+            if(i%3==0 && i%5!=0 && sum.compareTo(10)<1)
+                System.out.println(i);
+        }
+    }
+
+    // для удаления всех пробелов из строки без использования replace().
+    public static void deleteSpace(){
+        String input = "ysgs s hs  sgggf a f";
+        List <String> list = List.of(input.split(""));
+        List<String> result = list.stream().filter(i->!i.equals(" ")).toList();
+        result.forEach(System.out::print);
+    }
+
+    //для удаления всех пробелов из строки с помощью replace()
+    public static void removeSpace(){
+        String input = "8 h h yysh uhsihd. jsh";
+        String result = input.replaceAll(" ", "");
+        System.out.println(result);
+    }
+
+    //для проверки является ли введенное число - числом Армстронга
+    public static void isArmstrong() {
+        System.out.println("Введите число");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        String[] signs = input.split("");
+        int size = signs.length;
+        int result = 0;
+
+        for (String i : signs) {
+            int sign = Integer.parseInt(i);
+            result += Math.pow(sign ,size);
+        }
+
+        int intInput = Integer.parseInt(input);
+        System.out.println((intInput == result) ? "Число Армстронга" : "Нет");
     }
 
     //Напишите Java-программу, чтобы найти второе по величине число в массиве.
+    public static void findTwoMax() {
+        Integer[] array = new Integer[]{1, 2, 3, 4, 6, 7, 4, 5, 9, 12, 13, 30};
+        List<Integer> result = Stream.of(array).sorted(Comparator.naturalOrder()).toList();
+        System.out.println(result.get(result.size() - 2));
+
+    }
+
+    //Напишите программу на Java, чтобы найти повторяющиеся символы в строке
+    //вывод a-2 раза, b- 3 раза
+    public static void findRepeat() {
+        String input = "asdfsdasdghj";
+        Map<String, Integer> result = Stream.of(input.split("")).collect(
+                Collectors.toMap(
+                        i -> i,
+                        i -> 1,
+                        Integer::sum
+                )
+        );
+
+        result.forEach((k, v) -> {
+            if (v > 1) {
+                System.out.println(k + " встретилось " + v + " раз");
+            }
+        });
+
+
+    }
 
     //Date Time API
     public static void modifyDate() {
