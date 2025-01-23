@@ -15,32 +15,195 @@ public class Main {
 
 
     public static void main(String[] args) {
+        HashMap <String, String> map = new HashMap<>();
+        
+    }
 
-        delenie();
+    /**у hashSet нет операции get
+     * Можно использовать итератор для перебора элементов и получения нового*/
+    public static void hashSet(){
+        Set<String> set = new HashSet<>();
+        set.add("1");
+        set.add("w");
+
+
+    }
+
+    /**Задача: Напишите метод, который переворачивает слова в строке, сохраняя их порядок.*/
+
+    /**
+     * Итеративный факториал
+     */
+    public static void countFactorial() {
+        int input = 5;
+        int result = 1;
+
+        while (input > 1) {
+            result *= input;
+            input--;
+        }
+        System.out.println(result);
+    }
+
+    /**
+     * Рекурсивный факториал
+     */
+
+    public static long factorialRecursive(int n) {
+        if (n <= 1) return 1;
+        return n * factorialRecursive(n - 1);
+    }
+
+    /**
+     * Напишите метод, который возвращает первый неповторяющийся символ в строке.
+     * оказыкается метод forEach StreamAPI нельзя прервать
+     */
+    public static void detUnic() {
+        String input = "11223335667";
+        String[] array = input.split("");
+
+        Map<String, Integer> map = Arrays.stream(array).collect(Collectors.toMap(
+                i -> i,
+                i -> 1,
+                Integer::sum
+
+        ));
+
+        for (Map.Entry<String, Integer> i : map.entrySet()){
+            if (i.getValue()==1){
+                System.out.println(i.getKey());
+                break;
+            }
+        }
+    }
+
+
+    /**
+     * Найдите самую длинную подстроку без повторяющихся символов
+     */
+    public static void findMaxStr() {
+        String input = "ja71 hssys g = + jsdgug ufdygvjsbcv";
+        Set<String> result = Stream.of(input.split("")).collect(Collectors.toSet());
+        String str = String.join("", result);
+        System.out.println(str);
+    }
+
+    /**
+     * Проверить 2 строки на анаграмму (набор символов и их количество одинаковое, но порядок разный)
+     */
+    public static void isAnagramma() {
+        String first = "abcaf";
+        String second = "cbaav";
+
+        String str1 = Arrays.stream(first.split("")).sorted().collect(Collectors.joining());
+        String str2 = Arrays.stream(second.split("")).sorted().collect(Collectors.joining());
+
+        System.out.println(str1.equals(str2));
+    }
+
+    public static void find2max() {
+        int[] array = {1, 6, 4, 5, 7, 8, 9, 66, 99};
+
+        List<Integer> result = Arrays.stream(array).boxed().sorted(Comparator.reverseOrder()).toList();
+        System.out.println(result.get(1));
+
+        //Вариант без StreamApi
+        int[] arr = {1, 6, 4, 5, 7, 8, 9, 76, 100};
+        int max1 = Integer.MIN_VALUE;
+        int max2 = Integer.MAX_VALUE;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > max1) {
+                max2 = max1;
+                max1 = arr[i];
+            } else if (max2 < arr[i]) {
+                max2 = arr[i];
+            }
+        }
+
+        System.out.println(max2);
+    }
+
+    //Напишите метод, который сортирует массив целых чисел
+    public static void arraySolt() {
+        int[] a = {1, 2, 3, 4, 6, 3, 4, 6, 22, 5, 7, 7, 82, 92};
+
+        //По убыванию
+        for (int i = 0; i < a.length; i++) {
+            for (int j = i + 1; j < a.length; j++) {
+                if (a[j] > a[i]) {
+                    int temp = a[i];
+                    a[i] = a[j];
+                    a[j] = temp;
+                }
+            }
+        }
+        Arrays.stream(a).forEach(System.out::println);
+    }
+
+    /**
+     * 1) StringBuilder не принимает в конструктор int, но принимает String
+     * 2) У String нет reverse, нужен StringBuilder
+     * 3) Integer.parseInt() не принимает на вход StringBuilder, только стринг
+     * <p>
+     * *
+     */
+    public static void reverseInt() {
+        int input = -1230;
+        String str = String.valueOf(input);
+        boolean flag = false;
+        if (str.contains("-")) {
+            flag = true;
+            str = str.replace("-", "");
+        }
+
+        int result = Integer.parseInt(String.valueOf((new StringBuilder(str)).reverse()));
+        if (flag) result *= -1;
+
+
+        System.out.println(result);
+    }
+
+    public static void reverseInt1() {
+        int input = -12367;
+        long result = 0L;
+
+        while (input != 0) {
+            int sign = input % 10;
+            result = result * 10 + sign;
+            input = input / 10;
+
+            if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE)
+                result = 0;
+        }
+
+        System.out.println(result);
+
+
     }
 
     //написать код, который выводит числа от 0 до 1000, которые делятся на 3, но не делятся на 5,
     // и сумма цифр в которых меньше десяти.
-    public static void delenie(){
-        for (int i=0; i<1001; i++){
+    public static void delenie() {
+        for (int i = 0; i < 1001; i++) {
             Integer sum = Stream.of(String.valueOf(i).split(""))
                     .map(Integer::parseInt)
                     .reduce(Integer::sum).orElse(0);
-            if(i%3==0 && i%5!=0 && sum.compareTo(10)<1)
+            if (i % 3 == 0 && i % 5 != 0 && sum.compareTo(10) < 1)
                 System.out.println(i);
         }
     }
 
     // для удаления всех пробелов из строки без использования replace().
-    public static void deleteSpace(){
+    public static void deleteSpace() {
         String input = "ysgs s hs  sgggf a f";
-        List <String> list = List.of(input.split(""));
-        List<String> result = list.stream().filter(i->!i.equals(" ")).toList();
+        List<String> list = List.of(input.split(""));
+        List<String> result = list.stream().filter(i -> !i.equals(" ")).toList();
         result.forEach(System.out::print);
     }
 
     //для удаления всех пробелов из строки с помощью replace()
-    public static void removeSpace(){
+    public static void removeSpace() {
         String input = "8 h h yysh uhsihd. jsh";
         String result = input.replaceAll(" ", "");
         System.out.println(result);
@@ -57,7 +220,7 @@ public class Main {
 
         for (String i : signs) {
             int sign = Integer.parseInt(i);
-            result += Math.pow(sign ,size);
+            result += Math.pow(sign, size);
         }
 
         int intInput = Integer.parseInt(input);
