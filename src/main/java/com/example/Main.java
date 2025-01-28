@@ -14,33 +14,40 @@ import java.util.stream.Stream;
 public class Main {
 
 
+    @SneakyThrows
     public static void main(String[] args) {
 
-        delenie();
+        Student origin = new Student("12", 1);
+        Student clone = (Student) origin.clone();
+
+        clone.name = "1234";
+
+        System.out.println(clone);
+        System.out.println(origin);
     }
 
     //написать код, который выводит числа от 0 до 1000, которые делятся на 3, но не делятся на 5,
     // и сумма цифр в которых меньше десяти.
-    public static void delenie(){
-        for (int i=0; i<1001; i++){
+    public static void delenie() {
+        for (int i = 0; i < 1001; i++) {
             Integer sum = Stream.of(String.valueOf(i).split(""))
                     .map(Integer::parseInt)
                     .reduce(Integer::sum).orElse(0);
-            if(i%3==0 && i%5!=0 && sum.compareTo(10)<1)
+            if (i % 3 == 0 && i % 5 != 0 && sum.compareTo(10) < 1)
                 System.out.println(i);
         }
     }
 
     // для удаления всех пробелов из строки без использования replace().
-    public static void deleteSpace(){
+    public static void deleteSpace() {
         String input = "ysgs s hs  sgggf a f";
-        List <String> list = List.of(input.split(""));
-        List<String> result = list.stream().filter(i->!i.equals(" ")).toList();
+        List<String> list = List.of(input.split(""));
+        List<String> result = list.stream().filter(i -> !i.equals(" ")).toList();
         result.forEach(System.out::print);
     }
 
     //для удаления всех пробелов из строки с помощью replace()
-    public static void removeSpace(){
+    public static void removeSpace() {
         String input = "8 h h yysh uhsihd. jsh";
         String result = input.replaceAll(" ", "");
         System.out.println(result);
@@ -57,7 +64,7 @@ public class Main {
 
         for (String i : signs) {
             int sign = Integer.parseInt(i);
-            result += Math.pow(sign ,size);
+            result += Math.pow(sign, size);
         }
 
         int intInput = Integer.parseInt(input);
