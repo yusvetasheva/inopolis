@@ -18,10 +18,17 @@ import java.time.LocalDate;
 @Table(name = "ORDER_NOTIFICATION")
 public class OrderEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     Integer id;
+    @Column(name="articul_tovara")
     String articulTovara;
+    @Column(name="count")
     Integer count;
+    @Column(name="sum")
     BigDecimal sum;
+    @Column(name="\"date\"")
     LocalDate date;
+
+    @Version
+    private Integer version; // Поле для контроля версий
 }

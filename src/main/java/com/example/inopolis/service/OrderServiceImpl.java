@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Некорректный запрос");
         }
         OrderEntity orderEntity = dtoToEntity(order);
-//        repository.save(orderEntity);
+        repository.save(orderEntity);
 
         orderCount.increment();
         orderCounter.incrementAndGet();

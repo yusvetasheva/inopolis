@@ -1,0 +1,1 @@
+flyway -configFiles=migration.conf info
