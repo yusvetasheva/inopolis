@@ -1,9 +1,27 @@
+version: "3.8"
+
 services:
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   app:
-    image: stream-test
+    image: profiles
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    command: -java -jar stream-test.jar
+    depends_on:
+      - db
+    command: java -jar profiles.jar
+
+volumes:
+  postgres_data:

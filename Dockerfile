@@ -7,7 +7,7 @@ FROM openjdk:17
 WORKDIR /app
 
 # Копируем jar файл приложения в контейнер
-COPY target/delete-1.0-SNAPSHOT.jar stream-test.jar
+COPY target/delete-1.0-SNAPSHOT.jar profiles.jar
 COPY source.txt /app/source.txt
 
 
@@ -15,4 +15,4 @@ COPY source.txt /app/source.txt
 EXPOSE 8080
 
 # Запускаем приложение
-ENTRYPOINT ["java", "-jar", "stream-test.jar"]
+ENTRYPOINT ["java", "-jar", "profiles.jar"]
