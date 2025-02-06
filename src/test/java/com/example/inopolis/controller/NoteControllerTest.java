@@ -1,6 +1,5 @@
-package com.example.inopolis;
+package com.example.inopolis.controller;
 
-import com.example.inopolis.controller.NoteController;
 import com.example.inopolis.model.NoteDTO;
 import com.example.inopolis.service.NoteService;
 import com.fasterxml.jackson.databind.ObjectMapper;

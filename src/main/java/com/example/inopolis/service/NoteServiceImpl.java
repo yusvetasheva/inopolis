@@ -47,7 +47,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public NoteDTO getById(Integer id) {
-        if (id == null) return null;
+        if (id == null) throw new IllegalArgumentException("id в методе getById не может быть null");
         return repository.findById(id)
                 .map(this::entityToDto)
                 .orElse(null); // или Optional<NoteDTO>
