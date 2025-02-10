@@ -1,8 +1,10 @@
 package com.example.inopolis.controller;
 
-import com.example.inopolis.model.NoteDTO;
-import com.example.inopolis.service.NoteService;
+import com.example.inopolis.model.CourseEnum;
+import com.example.inopolis.model.StudentDTO;
+import com.example.inopolis.service.StudentServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -23,91 +26,74 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * только веб-слоя, поэтому зависимости контроллера, такие как NoteService,
  * мокаются с помощью @MockBean.
  */
-@WebMvcTest(NoteController.class)
+@WebMvcTest(StudentController.class)
 public class NoteControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private NoteService noteService;
+    private StudentServiceImpl service;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
-    public void testCreateNote() throws Exception {
-        NoteDTO dto = getDto();
+    public void testAddStudent() throws Exception {
+        StudentDTO dto = getDto();
 
         String json = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(post("/notes/create")
+        mockMvc.perform(post("/api/student/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Заметка создана"));
+                .andExpect(content().string("Студент успешно добавлен"));
 
-        verify(noteService).create(any(NoteDTO.class));
+        verify(service).addStudent(any(StudentDTO.class));
     }
 
     @Test
-    public void testGetByIdNote() throws Exception {
-        NoteDTO noteDTO = getDto();
+    public void testGetAll() throws Exception {
 
-        when(noteService.getById(eq(3))).thenReturn(noteDTO);
+        when(service.getAllStudents()).thenReturn(List.of(getDto()));
 
         // Выполняем GET-запрос, используя переменную пути для id
-        mockMvc.perform(get("/notes/get-by-id/{id}", 3)
+        mockMvc.perform(get("/api/student/getAll")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(3))
-                .andExpect(jsonPath("$.topic").value("Тестовая тема"))
-                .andExpect(jsonPath("$.fullText").value("Тестовый текст"));
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
+                .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"))
+                .andExpect(jsonPath("$[0].courseEnum").value("ENGLISH"));
     }
 
     @Test
-    public void deleteByIdNote() throws Exception {
+    public void deleteById() throws Exception {
 
-        mockMvc.perform(delete("/notes/delete/{id}", 1)
+        mockMvc.perform(delete("/api/student/delete/{id}", 3)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Зачетка удалена"));
+                .andExpect(content().string("Студент успешно удален"));
 
     }
 
     @Test
-    public void updateNote() throws Exception {
+    public void updateStudent() throws Exception {
 
-        NoteDTO noteDTO = getDto();
-
-        mockMvc.perform(put("/notes/update/{id}", 1)
+        mockMvc.perform(put("/api/student/update/{id}", 3)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(noteDTO)))
+                        .content(objectMapper.writeValueAsString(getDto())))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Заявка обновлена"));
+                .andExpect(content().string("Студент успешно обновлен"));
     }
 
-    @Test
-    public void getAll() throws Exception {
-        NoteDTO noteDTO1 = getDto();
-        NoteDTO noteDTO2 = getDto();
-
-        when(noteService.getAllNotes()).thenReturn(List.of(noteDTO1, noteDTO2));
-
-        mockMvc.perform(get("/notes/get-all")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].topic").value(noteDTO1.getTopic()))
-                .andExpect(jsonPath("$[1].fullText").value(noteDTO2.getFullText()));
-
-    }
-
-    public NoteDTO getDto(){
-        return NoteDTO.builder()
+    public StudentDTO getDto(){
+        return StudentDTO.builder()
                 .id(3)
-                .topic("Тестовая тема")
-                .fullText("Тестовый текст")
+                .fio("Петров Петр Петрович")
+                .email("petrov200@gmail.com")
+                .courseEnum(CourseEnum.ENGLISH)
                 .build();
     }
 }
