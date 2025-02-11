@@ -1,5 +1,6 @@
 package com.example.inopolis.controller;
 
+import com.example.inopolis.model.CourseDTO;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.service.StudentServiceImpl;
 import jakarta.validation.Valid;
@@ -16,10 +17,16 @@ public class StudentController {
     @Autowired
     StudentServiceImpl service;
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/add-student")
     public ResponseEntity<String> addStudent(@RequestBody @Valid StudentDTO student) {
         service.addStudent(student);
         return ResponseEntity.ok("Студент успешно добавлен");
+    }
+
+    @PostMapping(value = "/add-course/{studentId}")
+    public ResponseEntity<String> addCourseToStudent(@PathVariable Integer studentId, @RequestBody CourseDTO course){
+        service.addCourseToStudent(studentId, course);
+        return ResponseEntity.ok("Курс успешно добавлен");
     }
 
     @PutMapping(value = "/update/{id}")

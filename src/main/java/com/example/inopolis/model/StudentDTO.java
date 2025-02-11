@@ -1,9 +1,13 @@
 package com.example.inopolis.model;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,9 +19,10 @@ public class StudentDTO {
     @NotNull(message = "Поле id не может быть пустым")
     Integer id;
     @NotBlank(message = "Поле fio не может быть пустым")
+    @Pattern(regexp = "^[А-Яа-яA-Za-z\\s-]+$", message = "ФИО может содержать только буквы")
     String fio;
     @NotBlank(message = "Поле email не может быть пустым")
+    @Email(message = "Некорректный формат email")
     String email;
-    @NotNull(message = "Поле courseEnum не может быть пустым")
-    CourseEnum courseEnum;
+    private List<CourseEntity> courses;
 }

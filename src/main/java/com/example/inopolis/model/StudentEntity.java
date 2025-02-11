@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -20,7 +23,7 @@ public class StudentEntity {
     String fio;
     @Column(name = "email")
     String email;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "course")
-    CourseEnum courseEnum;
+    @OneToMany(targetEntity = CourseEntity.class, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @JoinColumn(name = "student_id")
+    private List<CourseEntity> courses= new ArrayList<>();
 }
