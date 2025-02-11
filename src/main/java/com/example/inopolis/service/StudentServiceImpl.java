@@ -21,8 +21,11 @@ public class StudentServiceImpl implements StudentService {
     private final StudentMapper studentMapper = StudentMapper.INSTANCE;
     private final CourseMapper courseMapper = CourseMapper.INSTANCE;
 
-    @Autowired
-    StudentRepository repository;
+    private final StudentRepository repository;
+
+    public StudentServiceImpl(StudentRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<StudentDTO> getAllStudents() {

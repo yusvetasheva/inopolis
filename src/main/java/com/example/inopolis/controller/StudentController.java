@@ -2,6 +2,7 @@ package com.example.inopolis.controller;
 
 import com.example.inopolis.model.CourseDTO;
 import com.example.inopolis.model.StudentDTO;
+import com.example.inopolis.service.StudentService;
 import com.example.inopolis.service.StudentServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/student")
 public class StudentController {
-    @Autowired
-    StudentServiceImpl service;
+
+    private final StudentService service;
+
+    public StudentController(StudentService service) {
+        this.service = service;
+    }
 
     @PostMapping(value = "/add-student")
     public ResponseEntity<String> addStudent(@RequestBody @Valid StudentDTO student) {
