@@ -1,15 +1,16 @@
 package com.example.inopolis.controller;
 
-import com.example.inopolis.model.CourseDTO;
+import com.example.courses.dto.CourseDTO;
+import com.example.inopolis.model.AddCourseToSyudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.service.StudentService;
-import com.example.inopolis.service.StudentServiceImpl;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -24,14 +25,17 @@ public class StudentController {
 
     @PostMapping(value = "/add-student")
     public ResponseEntity<String> addStudent(@RequestBody @Valid StudentDTO student) {
-        service.addStudent(student);
+        service.registerStudent(student);
         return ResponseEntity.ok("Студент успешно добавлен");
     }
 
-    @PostMapping(value = "/add-course/{studentId}")
-    public ResponseEntity<String> addCourseToStudent(@PathVariable Integer studentId, @RequestBody CourseDTO course){
-        service.addCourseToStudent(studentId, course);
-        return ResponseEntity.ok("Курс успешно добавлен");
+    @PostMapping(value = "/add-course")
+    public ResponseEntity<String> addCourseToStudent(@RequestBody AddCourseToSyudentRequest request){
+        String result = service.addCourseToStudent(request);
+        if(result.equals("Успех"))
+        return ResponseEntity.ok("Курс " + request.getCourse() + " успешно добавлен студенту с id = " + request.getStudentId());
+        else
+            return ResponseEntity.badRequest().body(result);
     }
 
     @PutMapping(value = "/update/{id}")
@@ -49,6 +53,16 @@ public class StudentController {
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<StudentDTO>> getAllStudent(){
         return ResponseEntity.of(Optional.of(service.getAllStudents()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 }

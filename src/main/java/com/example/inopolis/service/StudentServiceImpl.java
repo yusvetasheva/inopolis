@@ -1,14 +1,14 @@
 package com.example.inopolis.service;
 
-import com.example.inopolis.mapper.CourseMapper;
+import com.example.courses.dto.CourseDTO;
+import com.example.courses.mapper.CourseMapper;
 import com.example.inopolis.mapper.StudentMapper;
-import com.example.inopolis.model.CourseEntity;
-import com.example.inopolis.model.CourseDTO;
+import com.example.inopolis.model.AddCourseToSyudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.model.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,14 @@ import java.util.Optional;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentMapper studentMapper = StudentMapper.INSTANCE;
-    private final CourseMapper courseMapper = CourseMapper.INSTANCE;
 
     private final StudentRepository repository;
 
-    public StudentServiceImpl(StudentRepository repository) {
+    private final RestClient restClient;
+
+    public StudentServiceImpl(StudentRepository repository, RestClient restClient) {
         this.repository = repository;
+        this.restClient = restClient;
     }
 
     @Override
@@ -35,8 +37,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void addStudent(StudentDTO studentDTO) {
-        repository.save(studentMapper.dtoToEntity(studentDTO));
+    public void registerStudent(StudentDTO studentDTO) {
+        StudentEntity entity = studentMapper.dtoToEntity(studentDTO);
+        repository.save(entity);  // save автоматически сгенерирует id
     }
 
     @Override
@@ -45,7 +48,8 @@ public class StudentServiceImpl implements StudentService {
         Optional<StudentEntity> existEntity = repository.findById(id);
         if (existEntity.isEmpty())
             throw new NoSuchElementException("Нет студента с id = " + id);
-        existEntity.get().setCourses(newStudent.getCourses());
+        ;
+
         existEntity.get().setFio(newStudent.getFio());
         existEntity.get().setEmail(newStudent.getEmail());
         repository.save(existEntity.get());
@@ -58,17 +62,27 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void addCourseToStudent(Integer studentId, CourseDTO courseDTO) {
-        if (studentId == null)
+    public String addCourseToStudent(AddCourseToSyudentRequest request) {
+        if (request.getStudentId() == null)
             throw new IllegalArgumentException("studentId в методе addCourseToStudent не может быть null");
-        if (courseDTO == null || courseDTO.getCourse() == null)
-            throw new IllegalArgumentException("course в методе addCourseToStudent не может быть null");
+        if (request.getCourse() == null || request.getCourse().isEmpty())
+            throw new IllegalArgumentException("course в методе addCourseToStudent не может быть null/empty");
 
-        StudentEntity existStudent = repository.findById(studentId)
-                .orElseThrow(() -> new NoSuchElementException("Нет студента с id = " + studentId));
+        StudentEntity existStudent = repository.findById(request.getStudentId())
+                .orElseThrow(() -> new NoSuchElementException("Нет студента с id = " + request.getStudentId()));
 
-        existStudent.getCourses().add(courseMapper.dtoToEntity(courseDTO));
-        repository.save(existStudent);
+        //Проверяем, существует ли добавляемый курс
+        CourseDTO existCourse = restClient.get()
+                .uri("/get-by-name?name=" + request.getCourse())
+                .retrieve()
+                .body(CourseDTO.class);
+
+        if(existCourse.getIsActive()){
+            existStudent.setCourse(request.getCourse());
+            repository.save(existStudent);
+            return "Успех";
+        }
+        else return "Данный курс не активен";
     }
 
 }

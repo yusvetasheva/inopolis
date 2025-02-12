@@ -1,23 +1,26 @@
 package com.example.inopolis.controller;
 
-import com.example.inopolis.mapper.CourseMapper;
-import com.example.inopolis.mapper.StudentMapper;
-import com.example.inopolis.model.CourseDTO;
-import com.example.inopolis.model.CourseEnum;
+import com.example.courses.dto.CourseDTO;
+import com.example.inopolis.model.AddCourseToSyudentRequest;
 import com.example.inopolis.model.StudentDTO;
+import com.example.inopolis.model.StudentEntity;
+import com.example.inopolis.repository.StudentRepository;
 import com.example.inopolis.service.StudentServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,7 +54,7 @@ public class StudentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Студент успешно добавлен"));
 
-        verify(service).addStudent(any(StudentDTO.class));
+        verify(service).registerStudent(any(StudentDTO.class));
     }
 
     @Test
@@ -66,19 +69,6 @@ public class StudentControllerTest {
                 .andExpect(jsonPath("$[0].id").value(3))
                 .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
                 .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
-    }
-
-    @Test
-    public void testAddCourseToStudent() throws Exception {
-
-        mockMvc.perform(post("/api/student/add-course/{id}", 3)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(getCourseDto())))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Курс успешно добавлен"));
-
-        verify(service).addCourseToStudent(any(Integer.class), any(CourseDTO.class));
-
     }
 
     @Test
@@ -109,9 +99,24 @@ public class StudentControllerTest {
                 .build();
     }
 
+    public StudentEntity getStudentEntity(){
+        return StudentEntity.builder()
+                .id(3)
+                .fio("Петров Петр Петрович")
+                .email("petrov200@gmail.com")
+                .build();
+    }
+
     public CourseDTO getCourseDto() {
         return CourseDTO.builder()
-                .course(CourseEnum.MATH)
+                .name("test")
+                .build();
+    }
+
+    public AddCourseToSyudentRequest getAddCourseRequest() {
+        return AddCourseToSyudentRequest.builder()
+                .course("test")
+                .studentId(1)
                 .build();
     }
 }

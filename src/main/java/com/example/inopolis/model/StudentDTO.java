@@ -1,5 +1,6 @@
 package com.example.inopolis.model;
 
+import com.example.courses.model.CourseEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentDTO {
-    @NotNull(message = "Поле id не может быть пустым")
     Integer id;
     @NotBlank(message = "Поле fio не может быть пустым")
     @Pattern(regexp = "^[А-Яа-яA-Za-z\\s-]+$", message = "ФИО может содержать только буквы")

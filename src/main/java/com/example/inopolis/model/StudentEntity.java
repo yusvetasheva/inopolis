@@ -1,5 +1,6 @@
 package com.example.inopolis.model;
 
+import com.example.courses.model.CourseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Student")
+@Table(name = "student_new")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentEntity {
     @Id
@@ -23,7 +24,6 @@ public class StudentEntity {
     String fio;
     @Column(name = "email")
     String email;
-    @OneToMany(targetEntity = CourseEntity.class, cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "student_id")
-    private List<CourseEntity> courses= new ArrayList<>();
+    @Column(name = "course")
+    String course;
 }
