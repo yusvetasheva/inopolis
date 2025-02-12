@@ -41,13 +41,14 @@ public class StudentControllerTest {
     public void testAddStudent() throws Exception {
         StudentDTO dto = getStudentDto();
 
+        when(service.registerStudent(any(StudentDTO.class))).thenReturn(dto);
+
         String json = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(post("/api/student/add-student")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Студент успешно добавлен"));
+                .andExpect(status().isOk());
 
         verify(service).registerStudent(any(StudentDTO.class));
     }
@@ -58,32 +59,40 @@ public class StudentControllerTest {
         when(service.getAllStudents()).thenReturn(List.of(getStudentDto()));
 
         // Выполняем GET-запрос, используя переменную пути для id
-        mockMvc.perform(get("/api/student/getAll")
+        mockMvc.perform(get("/api/student/get-all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(3))
                 .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
                 .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
+
+    verify(service).getAllStudents();
+
     }
 
     @Test
     public void deleteById() throws Exception {
 
+        when(service.deleteStudent(any())).thenReturn(getStudentDto());
+
         mockMvc.perform(delete("/api/student/delete/{id}", 3)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Студент успешно удален"));
+                .andExpect(status().isOk());
 
+        verify(service).deleteStudent(any());
     }
 
     @Test
     public void updateStudent() throws Exception {
 
+        when(service.updateStudent(any(), any())).thenReturn(getStudentDto());
+
         mockMvc.perform(put("/api/student/update/{id}", 3)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(getStudentDto())))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Студент успешно обновлен"));
+                .andExpect(status().isOk());
+
+        verify(service).updateStudent(any(), any());
     }
 
     public StudentDTO getStudentDto() {

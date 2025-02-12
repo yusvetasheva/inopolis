@@ -24,7 +24,7 @@ public class StudentController {
 
     @PostMapping(value = "/add-student")
     public ResponseEntity<StudentDTO> addStudent(@RequestBody @Valid StudentDTO student) {
-        return ResponseEntity.of(Optional.of(service.registerStudent(student)));
+        return ResponseEntity.of(Optional.ofNullable(service.registerStudent(student)));
     }
 
     @PostMapping(value = "/add-course")
@@ -38,17 +38,17 @@ public class StudentController {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id, @RequestBody StudentDTO student) {
-        return ResponseEntity.of(Optional.of(service.updateStudent(id, student)));
+        return ResponseEntity.of(Optional.ofNullable(service.updateStudent(id, student)));
     }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<StudentDTO> deleteStudent(@PathVariable Integer id) {
-        return ResponseEntity.of(Optional.of(service.deleteStudent(id)));
+        return ResponseEntity.of(Optional.ofNullable(service.deleteStudent(id)));
     }
 
     @GetMapping(value = "/get-all")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
-        return ResponseEntity.of(Optional.of(service.getAllStudents()));
+        return ResponseEntity.of(Optional.ofNullable(service.getAllStudents()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
