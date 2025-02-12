@@ -1,12 +1,12 @@
 package com.example.inopolis.service;
 
 import com.example.courses.dto.CourseDTO;
-import com.example.courses.mapper.CourseMapper;
 import com.example.inopolis.mapper.StudentMapper;
-import com.example.inopolis.model.AddCourseToSyudentRequest;
+import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.model.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -37,13 +38,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void registerStudent(StudentDTO studentDTO) {
+    public StudentDTO registerStudent(StudentDTO studentDTO) {
         StudentEntity entity = studentMapper.dtoToEntity(studentDTO);
-        repository.save(entity);  // save автоматически сгенерирует id
+        repository.save(entity);
+        return studentDTO;
     }
 
     @Override
-    public void updateStudent(Integer id, StudentDTO newStudent) {
+    public StudentDTO updateStudent(Integer id, StudentDTO newStudent) {
         if (id == null) throw new IllegalArgumentException("id в методе updateStudent не может быть null");
         Optional<StudentEntity> existEntity = repository.findById(id);
         if (existEntity.isEmpty())
@@ -53,16 +55,22 @@ public class StudentServiceImpl implements StudentService {
         existEntity.get().setFio(newStudent.getFio());
         existEntity.get().setEmail(newStudent.getEmail());
         repository.save(existEntity.get());
+
+        newStudent.setId(id);
+        return newStudent;
     }
 
     @Override
-    public void deleteStudent(Integer id) {
+    public StudentDTO deleteStudent(Integer id) {
         if (id == null) throw new IllegalArgumentException("id в методе updateStudent не может быть null");
+        Optional<StudentEntity> existStudent = repository.findById(id);
+        if (existStudent.isEmpty()) throw new NoSuchElementException("В БД нет элемента с id = " + id);
         repository.deleteById(id);
+        return studentMapper.entityToDto(existStudent.get());
     }
 
     @Override
-    public String addCourseToStudent(AddCourseToSyudentRequest request) {
+    public String addCourseToStudent(AddCourseToStudentRequest request) {
         if (request.getStudentId() == null)
             throw new IllegalArgumentException("studentId в методе addCourseToStudent не может быть null");
         if (request.getCourse() == null || request.getCourse().isEmpty())
@@ -72,17 +80,21 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new NoSuchElementException("Нет студента с id = " + request.getStudentId()));
 
         //Проверяем, существует ли добавляемый курс
-        CourseDTO existCourse = restClient.get()
-                .uri("/get-by-name?name=" + request.getCourse())
-                .retrieve()
-                .body(CourseDTO.class);
+        CourseDTO existCourse = null;
+        try {
+            existCourse = restClient.get()
+                    .uri("/get-by-name?name=" + request.getCourse())
+                    .retrieve()
+                    .body(CourseDTO.class);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
-        if(existCourse.getIsActive()){
+        if (existCourse != null && existCourse.getIsActive()) {
             existStudent.setCourse(request.getCourse());
             repository.save(existStudent);
             return "Успех";
-        }
-        else return "Данный курс не активен";
+        } else return "Данный курс не активен";
     }
 
 }

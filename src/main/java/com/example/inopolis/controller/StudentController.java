@@ -1,7 +1,6 @@
 package com.example.inopolis.controller;
 
-import com.example.courses.dto.CourseDTO;
-import com.example.inopolis.model.AddCourseToSyudentRequest;
+import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.service.StudentService;
 import jakarta.validation.Valid;
@@ -24,34 +23,31 @@ public class StudentController {
     }
 
     @PostMapping(value = "/add-student")
-    public ResponseEntity<String> addStudent(@RequestBody @Valid StudentDTO student) {
-        service.registerStudent(student);
-        return ResponseEntity.ok("Студент успешно добавлен");
+    public ResponseEntity<StudentDTO> addStudent(@RequestBody @Valid StudentDTO student) {
+        return ResponseEntity.of(Optional.of(service.registerStudent(student)));
     }
 
     @PostMapping(value = "/add-course")
-    public ResponseEntity<String> addCourseToStudent(@RequestBody AddCourseToSyudentRequest request){
+    public ResponseEntity<String> addCourseToStudent(@RequestBody AddCourseToStudentRequest request) {
         String result = service.addCourseToStudent(request);
-        if(result.equals("Успех"))
-        return ResponseEntity.ok("Курс " + request.getCourse() + " успешно добавлен студенту с id = " + request.getStudentId());
+        if (result.equals("Успех"))
+            return ResponseEntity.ok("Курс " + request.getCourse() + " успешно добавлен студенту с id = " + request.getStudentId());
         else
             return ResponseEntity.badRequest().body(result);
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable Integer id, @RequestBody StudentDTO student) {
-        service.updateStudent(id, student);
-        return ResponseEntity.ok("Студент успешно обновлен");
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id, @RequestBody StudentDTO student) {
+        return ResponseEntity.of(Optional.of(service.updateStudent(id, student)));
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Integer id){
-        service.deleteStudent(id);
-        return ResponseEntity.ok("Студент успешно удален");
+    public ResponseEntity<StudentDTO> deleteStudent(@PathVariable Integer id) {
+        return ResponseEntity.of(Optional.of(service.deleteStudent(id)));
     }
 
-    @GetMapping(value = "/getAll")
-    public ResponseEntity<List<StudentDTO>> getAllStudent(){
+    @GetMapping(value = "/get-all")
+    public ResponseEntity<List<StudentDTO>> getAllStudent() {
         return ResponseEntity.of(Optional.of(service.getAllStudents()));
     }
 

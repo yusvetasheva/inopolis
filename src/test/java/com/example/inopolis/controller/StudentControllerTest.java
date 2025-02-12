@@ -1,24 +1,19 @@
 package com.example.inopolis.controller;
 
 import com.example.courses.dto.CourseDTO;
-import com.example.inopolis.model.AddCourseToSyudentRequest;
+import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.model.StudentEntity;
-import com.example.inopolis.repository.StudentRepository;
 import com.example.inopolis.service.StudentServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestClient;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -113,8 +108,8 @@ public class StudentControllerTest {
                 .build();
     }
 
-    public AddCourseToSyudentRequest getAddCourseRequest() {
-        return AddCourseToSyudentRequest.builder()
+    public AddCourseToStudentRequest getAddCourseRequest() {
+        return AddCourseToStudentRequest.builder()
                 .course("test")
                 .studentId(1)
                 .build();

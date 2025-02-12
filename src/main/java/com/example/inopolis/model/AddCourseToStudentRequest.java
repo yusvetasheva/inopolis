@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @Builder
-public class AddCourseToSyudentRequest {
+public class AddCourseToStudentRequest {
     @JsonProperty(value = "studentId")
     Integer studentId;
     @JsonProperty(value = "course")

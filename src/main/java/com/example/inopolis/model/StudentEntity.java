@@ -1,12 +1,8 @@
 package com.example.inopolis.model;
 
-import com.example.courses.model.CourseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
