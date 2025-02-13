@@ -41,23 +41,23 @@ public class StudentController {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id, @RequestBody StudentDTO student) {
-        return ResponseEntity.of(Optional.ofNullable(service.updateStudent(id, student)));
+        return new ResponseEntity<>(service.updateStudent(id, student), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<StudentDTO> deleteStudent(@PathVariable Integer id) {
-        return ResponseEntity.of(Optional.ofNullable(service.deleteStudent(id)));
+        return new ResponseEntity<>(service.deleteStudent(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/get-all")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
-        return ResponseEntity.of(Optional.ofNullable(service.getAllStudents()));
+        return new ResponseEntity<>(service.getAllStudents(), HttpStatus.OK);
     }
 
     @AroundAnnotation
     @GetMapping(value = "/get-student-by-course/{courseName}")
     public ResponseEntity<List<StudentDTO>> getStudentsByCourse(@PathVariable String courseName) {
-        return ResponseEntity.of(Optional.ofNullable(service.getStudentsByCourse(courseName)));
+        return new ResponseEntity<>(service.getStudentsByCourse(courseName), HttpStatus.OK);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
