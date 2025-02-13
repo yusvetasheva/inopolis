@@ -66,7 +66,21 @@ public class StudentControllerTest {
                 .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
                 .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
 
-    verify(service).getAllStudents();
+        verify(service).getAllStudents();
+    }
+
+    @Test
+    public void getStudentsByCourse() throws Exception{
+
+        when(service.getStudentsByCourse(any())).thenReturn(List.of(getStudentDto()));
+
+        mockMvc.perform(get("/api/student/get-student-by-course/{courseName}", "test")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
 
     }
 
@@ -103,7 +117,7 @@ public class StudentControllerTest {
                 .build();
     }
 
-    public StudentEntity getStudentEntity(){
+    public StudentEntity getStudentEntity() {
         return StudentEntity.builder()
                 .id(3)
                 .fio("Петров Петр Петрович")
