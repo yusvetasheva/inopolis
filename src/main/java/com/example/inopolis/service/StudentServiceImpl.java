@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -38,8 +35,36 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<StudentDTO> getStudentsByCourse(String courseName) {
+        if (courseName == null || courseName.isEmpty())
+            throw new IllegalArgumentException("courseName не может быть пустым в методе getStudentsByCourse");
+
+        List<StudentEntity> studentOnCourseList = repository.findStudentsByCourse(courseName);
+
+        return studentOnCourseList.isEmpty() ?
+                Collections.emptyList() :
+                studentOnCourseList.stream().map(studentMapper::entityToDto).toList();
+    }
+
+    @Override
     public StudentDTO registerStudent(StudentDTO studentDTO) {
         StudentEntity entity = studentMapper.dtoToEntity(studentDTO);
+
+        /**Проверяем, существует ли добавляемый курс*/
+        CourseDTO existCourse = null;
+        try {
+            existCourse = restClient.get()
+                    .uri("/get-by-name?name=" + studentDTO.getCourse())
+                    .retrieve()
+                    .body(CourseDTO.class);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        /**Если курса не существует, не сохраняем его в БД*/
+        if (existCourse == null || existCourse.getIsActive()==null || !existCourse.getIsActive())
+            entity.setCourse(null);
+
         repository.save(entity);
         return studentDTO;
     }

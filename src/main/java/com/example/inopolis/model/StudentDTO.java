@@ -23,5 +23,5 @@ public class StudentDTO {
     @NotBlank(message = "Поле email не может быть пустым")
     @Email(message = "Некорректный формат email")
     String email;
-    private List<CourseEntity> courses;
+    String course;
 }

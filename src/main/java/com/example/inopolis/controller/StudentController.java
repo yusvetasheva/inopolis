@@ -1,5 +1,6 @@
 package com.example.inopolis.controller;
 
+import com.example.inopolis.aspect.AroundAnnotation;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.service.StudentService;
@@ -22,11 +23,13 @@ public class StudentController {
         this.service = service;
     }
 
+    @AroundAnnotation
     @PostMapping(value = "/add-student")
     public ResponseEntity<StudentDTO> addStudent(@RequestBody @Valid StudentDTO student) {
         return ResponseEntity.of(Optional.ofNullable(service.registerStudent(student)));
     }
 
+    @AroundAnnotation
     @PostMapping(value = "/add-course")
     public ResponseEntity<String> addCourseToStudent(@RequestBody AddCourseToStudentRequest request) {
         String result = service.addCourseToStudent(request);
@@ -49,6 +52,12 @@ public class StudentController {
     @GetMapping(value = "/get-all")
     public ResponseEntity<List<StudentDTO>> getAllStudent() {
         return ResponseEntity.of(Optional.ofNullable(service.getAllStudents()));
+    }
+
+    @AroundAnnotation
+    @GetMapping(value = "/get-student-by-course/{courseName}")
+    public ResponseEntity<List<StudentDTO>> getStudentsByCourse(@PathVariable String courseName) {
+        return ResponseEntity.of(Optional.ofNullable(service.getStudentsByCourse(courseName)));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
