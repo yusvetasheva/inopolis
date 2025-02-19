@@ -1,6 +1,7 @@
 package com.example.inopolis.service;
 
 import com.example.courses.dto.CourseDTO;
+import com.example.inopolis.client.CourseRestClientApi;
 import com.example.inopolis.mapper.StudentMapper;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
@@ -20,9 +21,9 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository repository;
 
-    private final RestClient restClient;
+    private final CourseRestClientApi restClient;
 
-    public StudentServiceImpl(StudentRepository repository, RestClient restClient) {
+    public StudentServiceImpl(StudentRepository repository, CourseRestClientApi restClient) {
         this.repository = repository;
         this.restClient = restClient;
     }
@@ -53,16 +54,13 @@ public class StudentServiceImpl implements StudentService {
         /**Проверяем, существует ли добавляемый курс*/
         CourseDTO existCourse = null;
         try {
-            existCourse = restClient.get()
-                    .uri("/get-by-name?name=" + studentDTO.getCourse())
-                    .retrieve()
-                    .body(CourseDTO.class);
+            existCourse = restClient.checkCourseIsExist(studentDTO.getCourse());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
         /**Если курса не существует, не сохраняем его в БД*/
-        if (existCourse == null || existCourse.getIsActive()==null || !existCourse.getIsActive())
+        if (existCourse == null || existCourse.getIsActive() == null || !existCourse.getIsActive())
             entity.setCourse(null);
 
         repository.save(entity);
@@ -107,10 +105,7 @@ public class StudentServiceImpl implements StudentService {
         //Проверяем, существует ли добавляемый курс
         CourseDTO existCourse = null;
         try {
-            existCourse = restClient.get()
-                    .uri("/get-by-name?name=" + request.getCourse())
-                    .retrieve()
-                    .body(CourseDTO.class);
+            existCourse = restClient.checkCourseIsExist(request.getCourse());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
