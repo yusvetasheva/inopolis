@@ -26,7 +26,7 @@ public class StudentController {
     @AroundAnnotation
     @PostMapping(value = "/add-student")
     public ResponseEntity<StudentDTO> addStudent(@RequestBody @Valid StudentDTO student) {
-        return ResponseEntity.of(Optional.ofNullable(service.registerStudent(student)));
+        return ResponseEntity.ok(service.registerStudent(student));
     }
 
     @AroundAnnotation
@@ -35,8 +35,20 @@ public class StudentController {
         String result = service.addCourseToStudent(request);
         if (result.equals("Успех"))
             return ResponseEntity.ok("Курс " + request.getCourse() + " успешно добавлен студенту с id = " + request.getStudentId());
+        else if (result.equals("Повтор"))
+            return ResponseEntity.ok("Студент с id = " + request.getStudentId() + " уже записан на курс " + request.getCourse());
         else
             return ResponseEntity.badRequest().body(result);
+    }
+
+    @GetMapping(value = "/get-with-such-course-amount/{amount}")
+    public ResponseEntity<List<StudentDTO>> getStudentWithSuchCoursesAmount(@PathVariable int amount){
+        return ResponseEntity.ok(service.getStudentWithSuchCoursesAmount(amount));
+    }
+
+    @GetMapping(value = "/get-course-like")
+    public ResponseEntity<List<StudentDTO>> getStudentsWithCoursesLike(@RequestParam String courseName){
+        return ResponseEntity.ok(service.getStudentsWithCoursesLike(courseName));
     }
 
     @PutMapping(value = "/update/{id}")

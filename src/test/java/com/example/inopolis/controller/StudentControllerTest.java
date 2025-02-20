@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -38,7 +39,85 @@ public class StudentControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void testAddStudent() throws Exception {
+    public void addCourseToStudent_SuccessTest() throws Exception {
+
+        when(service.addCourseToStudent(any())).thenReturn("Успех");
+
+        mockMvc.perform(post("/api/student/add-course")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(AddCourseToStudentRequest.builder().course("test").studentId(0).build())))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Курс test успешно добавлен студенту с id = 0"));
+
+        verify(service, times(1)).addCourseToStudent(any());
+
+    }
+
+    @Test
+    public void addCourseToStudent_RepeatTest() throws Exception {
+
+        when(service.addCourseToStudent(any())).thenReturn("Повтор");
+
+        mockMvc.perform(post("/api/student/add-course")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(AddCourseToStudentRequest.builder().course("test").studentId(0).build())))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Студент с id = 0 уже записан на курс test"));
+
+        verify(service, times(1)).addCourseToStudent(any());
+
+    }
+
+    @Test
+    public void addCourseToStudent_ErrorTest() throws Exception {
+
+        when(service.addCourseToStudent(any())).thenReturn("Данный курс не активен");
+
+        mockMvc.perform(post("/api/student/add-course")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(AddCourseToStudentRequest.builder().course("test").studentId(0).build())))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Данный курс не активен"));
+
+        verify(service, times(1)).addCourseToStudent(any());
+
+    }
+
+    @Test
+    public void getStudentWithSuchCoursesAmount_SuccessTest() throws Exception {
+
+        List<StudentDTO> list = Collections.singletonList(getStudentDto());
+
+        when(service.getStudentWithSuchCoursesAmount(2)).thenReturn(list);
+
+        mockMvc.perform(get("/api/student/get-with-such-course-amount/{amount}", 2)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
+                .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
+
+        verify(service, times(1)).getStudentWithSuchCoursesAmount(2);
+    }
+
+    @Test
+    public void getStudentsWithCoursesLike_Successtest() throws Exception{
+        List<StudentDTO> list = Collections.singletonList(getStudentDto());
+        when(service.getStudentsWithCoursesLike("course")).thenReturn(list);
+
+        mockMvc.perform(get("/api/student/get-course-like")
+                        .param("courseName", "course")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(3))
+                .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
+                .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
+
+        verify(service, times(1)).getStudentsWithCoursesLike("course");
+    }
+
+    @Test
+    public void addStudent_SuccessTest() throws Exception {
         StudentDTO dto = getStudentDto();
 
         when(service.registerStudent(any(StudentDTO.class))).thenReturn(dto);
@@ -70,7 +149,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void getStudentsByCourse() throws Exception{
+    public void getStudentsByCourse() throws Exception {
 
         when(service.getStudentsByCourse(any())).thenReturn(List.of(getStudentDto()));
 

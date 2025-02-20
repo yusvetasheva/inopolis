@@ -48,23 +48,28 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<StudentDTO> getStudentWithSuchCoursesAmount(int amount) {
+        List<StudentEntity> studentEntityList =
+                repository.findStudentWithSuchCoursesAmount(amount);
+
+        if (studentEntityList ==null || studentEntityList.isEmpty()) return Collections.emptyList();
+
+        return studentEntityList.stream().map(studentMapper::entityToDto).toList();
+    }
+
+    @Override
+    public List<StudentDTO> getStudentsWithCoursesLike(String course) {
+        List<StudentEntity> studentEntityList= repository.findStudentsWithCoursesLike(course);
+
+        if (studentEntityList==null || studentEntityList.isEmpty()) return  Collections.emptyList();
+        return studentEntityList.stream().map(studentMapper::entityToDto).toList();
+    }
+
+    @Override
     public StudentDTO registerStudent(StudentDTO studentDTO) {
         StudentEntity entity = studentMapper.dtoToEntity(studentDTO);
-
-        /**Проверяем, существует ли добавляемый курс*/
-        CourseDTO existCourse = null;
-        try {
-            existCourse = restClient.checkCourseIsExist(studentDTO.getCourse());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-
-        /**Если курса не существует, не сохраняем его в БД*/
-        if (existCourse == null || existCourse.getIsActive() == null || !existCourse.getIsActive())
-            entity.setCourse(null);
-
         repository.save(entity);
-        return studentDTO;
+        return studentMapper.entityToDto(entity);
     }
 
     @Override
@@ -111,7 +116,13 @@ public class StudentServiceImpl implements StudentService {
         }
 
         if (existCourse != null && existCourse.getIsActive()) {
-            existStudent.setCourse(request.getCourse());
+
+            //Если студент уже записан на данный курс, выводим об этом сообщение
+            //Если нет - добавляем курс студенту
+            if (existStudent.getCourses().contains(request.getCourse()))
+                return "Повтор";
+
+            existStudent.getCourses().add(request.getCourse());
             repository.save(existStudent);
             return "Успех";
         } else return "Данный курс не активен";

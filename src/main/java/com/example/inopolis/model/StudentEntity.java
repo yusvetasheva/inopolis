@@ -4,13 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "student_new")
+@Table(name = "student_final")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentEntity {
     @Id
@@ -20,6 +23,8 @@ public class StudentEntity {
     String fio;
     @Column(name = "email")
     String email;
+    @ElementCollection
+    @CollectionTable(name = "student_courses", joinColumns = @JoinColumn(name = "student_id"))
     @Column(name = "course")
-    String course;
+    List<String> courses = new ArrayList<>();
 }

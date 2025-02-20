@@ -11,7 +11,13 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends JpaRepository<StudentEntity, Integer> {
 
-    @Query("SELECT st FROM StudentEntity st WHERE st.course = :courseName")
+    @Query("SELECT st FROM StudentEntity st JOIN st.courses c WHERE c = :courseName")
     List<StudentEntity> findStudentsByCourse(@Param("courseName") String courseName);
+
+    @Query("SELECT st FROM StudentEntity st WHERE SIZE(st.courses) = :amount")
+    List<StudentEntity> findStudentWithSuchCoursesAmount(@Param("amount") int amount);
+
+    @Query("SELECT st FROM StudentEntity st JOIN st.courses c WHERE c LIKE CONCAT('%', :course, '%')")
+    List<StudentEntity> findStudentsWithCoursesLike(@Param("course") String course);
 
 }
