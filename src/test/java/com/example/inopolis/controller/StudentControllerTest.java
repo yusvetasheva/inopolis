@@ -1,6 +1,7 @@
 package com.example.inopolis.controller;
 
 import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import com.example.inopolis.model.StudentEntity;
@@ -101,7 +102,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void getStudentsWithCoursesLike_Successtest() throws Exception{
+    public void getStudentsWithCoursesLike_SuccessTest() throws Exception {
         List<StudentDTO> list = Collections.singletonList(getStudentDto());
         when(service.getStudentsWithCoursesLike("course")).thenReturn(list);
 
@@ -196,24 +197,10 @@ public class StudentControllerTest {
                 .build();
     }
 
-    public StudentEntity getStudentEntity() {
-        return StudentEntity.builder()
-                .id(3)
-                .fio("Петров Петр Петрович")
-                .email("petrov200@gmail.com")
-                .build();
-    }
-
     public CourseDTO getCourseDto() {
         return CourseDTO.builder()
                 .name("test")
-                .build();
-    }
-
-    public AddCourseToStudentRequest getAddCourseRequest() {
-        return AddCourseToStudentRequest.builder()
-                .course("test")
-                .studentId(1)
+                .comments(Collections.singletonList("comment"))
                 .build();
     }
 }

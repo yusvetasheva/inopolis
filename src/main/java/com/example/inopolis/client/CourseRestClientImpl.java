@@ -1,11 +1,17 @@
 package com.example.inopolis.client;
 
 import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.AddCommentToCourseRequest;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Component
-public class CourseRestClientImpl implements CourseRestClientApi{
+public class CourseRestClientImpl implements CourseRestClientApi {
 
     private final RestClient restClient;
 
@@ -18,10 +24,21 @@ public class CourseRestClientImpl implements CourseRestClientApi{
     @Override
     public CourseDTO checkCourseIsExist(String courseName) {
 
-        return  restClient.get()
+        return restClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/get-by-name")
                         .queryParam("name", courseName).build())
                 .retrieve()
                 .body(CourseDTO.class);
+    }
+
+    @Override
+    public CourseDTO addCommentToCourse(AddCommentToCourseRequest request) {
+
+       return restClient.post()
+               .uri("/add-comment")
+               .contentType(MediaType.APPLICATION_JSON)
+               .body(request)
+               .retrieve()
+               .body(CourseDTO.class);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.inopolis.controller;
 
+import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.aspect.AroundAnnotation;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
@@ -54,6 +56,11 @@ public class StudentController {
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id, @RequestBody StudentDTO student) {
         return new ResponseEntity<>(service.updateStudent(id, student), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/add-comment")
+    public ResponseEntity<CourseDTO> addCommentToCourse(@Valid @RequestBody AddCommentToCourseRequest request){
+        return new ResponseEntity<>(service.addCommentToCourse(request), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")

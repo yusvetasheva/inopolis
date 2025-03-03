@@ -1,6 +1,7 @@
 package com.example.inopolis.service;
 
 import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.client.CourseRestClientApi;
 import com.example.inopolis.mapper.StudentMapper;
 import com.example.inopolis.model.AddCourseToStudentRequest;
@@ -126,6 +127,12 @@ public class StudentServiceImpl implements StudentService {
             repository.save(existStudent);
             return "Успех";
         } else return "Данный курс не активен";
+    }
+
+    @Override
+    public CourseDTO addCommentToCourse(AddCommentToCourseRequest request) {
+
+        return restClient.addCommentToCourse(request);
     }
 
 }

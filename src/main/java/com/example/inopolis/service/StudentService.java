@@ -1,5 +1,7 @@
 package com.example.inopolis.service;
 
+import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.StudentDTO;
 import java.util.List;
@@ -20,4 +22,7 @@ public interface StudentService {
     StudentDTO deleteStudent(Integer id);
 
     String addCourseToStudent(AddCourseToStudentRequest request);
+
+    CourseDTO addCommentToCourse(AddCommentToCourseRequest request);
+
 }
