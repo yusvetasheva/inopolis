@@ -8,8 +8,38 @@ class Solution {
 
     public static void main(String[] args) {
 
-  Integer a = (int) Math.pow(10,2);
-        //return sum;
+        isValid("()");
+    }
+
+
+    public static boolean isValid(String s) {
+
+        StringBuilder openSign = new StringBuilder();
+
+        String[]array = s.split("");
+
+        for (int i=0; i<array.length; i++){
+            if (array[i].equals("(") ||
+                    array[i].equals("{") ||
+                    array[i].equals("[")) {
+                openSign.append(array[i]);
+                continue;
+            }
+
+            int len = openSign.length();
+
+            String reverse = new StringBuilder(String.valueOf(openSign.charAt(len - 1))).reverse().toString();
+
+
+            if (!array[i].equals(reverse))
+                return false;
+
+            openSign.deleteCharAt(len-1);
+        }
+
+        if (openSign.length()==0) return true;
+        return false;
+
     }
 
     /**
