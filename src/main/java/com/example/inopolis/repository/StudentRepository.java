@@ -1,6 +1,6 @@
 package com.example.inopolis.repository;
 
-import com.example.inopolis.model.StudentEntity;
+import com.example.inopolis.model.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

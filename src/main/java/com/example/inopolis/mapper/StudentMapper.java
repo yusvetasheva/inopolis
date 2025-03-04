@@ -1,9 +1,8 @@
 package com.example.inopolis.mapper;
 
-import com.example.inopolis.model.StudentDTO;
-import com.example.inopolis.model.StudentEntity;
+import com.example.inopolis.model.dto.StudentDTO;
+import com.example.inopolis.model.entity.StudentEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

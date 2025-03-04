@@ -1,4 +1,4 @@
-package com.example.inopolis.model;
+package com.example.inopolis.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

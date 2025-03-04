@@ -1,10 +1,8 @@
 package com.example.inopolis.controller;
 
-import com.example.courses.dto.CourseDTO;
-import com.example.courses.model.AddCommentToCourseRequest;
+import com.example.courses.model.dto.CourseDTO;
 import com.example.inopolis.model.AddCourseToStudentRequest;
-import com.example.inopolis.model.StudentDTO;
-import com.example.inopolis.model.StudentEntity;
+import com.example.inopolis.model.dto.StudentDTO;
 import com.example.inopolis.service.StudentServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

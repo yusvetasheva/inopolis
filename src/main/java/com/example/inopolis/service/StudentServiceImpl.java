@@ -1,16 +1,15 @@
 package com.example.inopolis.service;
 
-import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.dto.CourseDTO;
 import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.client.CourseRestClientApi;
 import com.example.inopolis.mapper.StudentMapper;
 import com.example.inopolis.model.AddCourseToStudentRequest;
-import com.example.inopolis.model.StudentDTO;
-import com.example.inopolis.model.StudentEntity;
+import com.example.inopolis.model.dto.StudentDTO;
+import com.example.inopolis.model.entity.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
 import java.util.*;
 

@@ -1,9 +1,9 @@
 package com.example.inopolis.service;
 
-import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.dto.CourseDTO;
 import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.model.AddCourseToStudentRequest;
-import com.example.inopolis.model.StudentDTO;
+import com.example.inopolis.model.dto.StudentDTO;
 import java.util.List;
 
 public interface StudentService {

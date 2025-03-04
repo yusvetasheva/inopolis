@@ -1,14 +1,10 @@
 package com.example.inopolis.client;
 
-import com.example.courses.dto.CourseDTO;
+import com.example.courses.model.dto.CourseDTO;
 import com.example.courses.model.AddCommentToCourseRequest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
 
 @Component
 public class CourseRestClientImpl implements CourseRestClientApi {

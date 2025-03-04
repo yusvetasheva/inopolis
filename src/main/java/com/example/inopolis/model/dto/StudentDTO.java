@@ -1,13 +1,10 @@
-package com.example.inopolis.model;
+package com.example.inopolis.model.dto;
 
-import com.example.courses.model.CourseEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Getter
 @Setter

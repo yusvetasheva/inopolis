@@ -3,8 +3,8 @@
 //import com.example.courses.dto.CourseDTO;
 //import com.example.courses.mapper.CourseMapper;
 //import com.example.inopolis.mapper.StudentMapper;
-//import com.example.inopolis.model.StudentDTO;
-//import com.example.inopolis.model.StudentEntity;
+//import com.example.inopolis.dto.StudentDTO;
+//import com.example.inopolis.entity.StudentEntity;
 //import com.example.inopolis.repository.StudentRepository;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
