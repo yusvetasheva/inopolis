@@ -8,7 +8,34 @@ class Solution {
 
     public static void main(String[] args) {
 
-        isValid("()");
+        plusOne(new int [] {9});
+    }
+
+    public static int[] plusOne(int[] digits) {
+
+        int perenos =1;
+        int last =0;
+
+        if (digits[digits.length-1]!=9){
+            digits[digits.length-1] = digits[digits.length-1]+1;
+            return digits;
+        }
+
+        for(int i = digits.length-1; i>=0; i--){
+            last = digits[i]+perenos;
+            perenos = last/10;
+            digits[i] = last%10;
+
+            if (perenos==0) return digits;
+        }
+
+        int [] result = new int [digits.length];
+        result[0] = perenos;
+
+        for (int i=1; i<digits.length; i++){
+            result[i] = digits[i-1];
+        }
+        return result;
     }
 
 
