@@ -15,13 +15,120 @@ public class Main {
 
 
     public static void main(String[] args) {
-        HashMap <String, String> map = new HashMap<>();
-        
+        System.out.println(check2());
+
     }
 
-    /**у hashSet нет операции get
-     * Можно использовать итератор для перебора элементов и получения нового*/
-    public static void hashSet(){
+    //Дан массив строк. Напишите функцию,
+    // которая находит первую повторяющуюся букву.
+    public static String check4(){
+        String [] array = {"a", "b", "a"};
+        Set<String> set = new HashSet<>();
+
+        for (String i : array){
+            if (!set.add(i)) {
+                return i;
+            }
+        }
+
+        return "";
+    }
+
+    //Дан массив строк. Напишите функцию,
+    // которая находит слово с максимальной частотой появления.
+    public static void check3(){
+        String [] array = {"q", "s", "x", "q"};
+
+        Map<String, Integer> map = Arrays.stream(array).collect(
+                Collectors.toMap(
+                        i->i,
+                        i->1,
+                        Integer::sum
+                )
+        );
+
+        int max = -1;
+        String result = "";
+
+        for (Map.Entry<String, Integer> i: map.entrySet()){
+            if (i.getValue()>max){
+                max = i.getValue();
+                result = i.getKey();
+            }
+        }
+
+        System.out.println(result);
+
+    }
+
+    //Напишите функцию, которая проверяет, содержит ли строка только уникальные символы.
+    public static boolean check2() {
+        String str = "1234565";
+
+        Set<Character> set = new HashSet<>();
+
+        for (char c : str.toCharArray()) {
+            if (!set.add(c))
+                return false;
+        }
+
+        return true;
+    }
+
+    //Сумма подмассива
+    //Дан массив целых чисел. Найдите максимальную сумму непрерывного подмассива.
+    public static void max2() {
+        int[] array = {1, 2, 3, 4, 5, 6, -1, 10, -90, 999, 22};
+
+        int currSum = 0;
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < array.length; i++) {
+            currSum += array[i];
+
+            if (currSum > max)
+                max = currSum;
+
+            if (currSum < 0)
+                currSum = 0;
+
+        }
+    }
+
+    //Описание: Дан массив символов.
+    // Напишите функцию, которая проверяет, является ли одна строка перестановкой другой.
+    public static void perest() {
+
+        String str1 = "abbc";
+        String str2 = "bacb";
+
+        if (str1.length() != str2.length()) System.out.println("Нет по длине");
+
+        int[] array = new int[26];
+
+        for (char c : str1.toCharArray()) {
+            array[c - 'a']++;
+        }
+
+        for (char a : str2.toCharArray()) {
+            array[a - 'a']--;
+        }
+
+        for (int i : array) {
+            if (array[i] != 0) {
+                System.out.println("Нет по составу");
+                break;
+            }
+        }
+
+        System.out.println("Даааа");
+    }
+
+    /**
+     * у hashSet нет операции get
+     * Можно использовать итератор для перебора элементов и получения нового
+     */
+    public static void hashSet() {
         Set<String> set = new HashSet<>();
         set.add("1");
         set.add("w");
@@ -69,8 +176,8 @@ public class Main {
 
         ));
 
-        for (Map.Entry<String, Integer> i : map.entrySet()){
-            if (i.getValue()==1){
+        for (Map.Entry<String, Integer> i : map.entrySet()) {
+            if (i.getValue() == 1) {
                 System.out.println(i.getKey());
                 break;
             }

@@ -8,7 +8,51 @@ class Solution {
 
     public static void main(String[] args) {
 
-        plusOne(new int [] {9});
+        numberOfAlternatingGroups(new int [] {0,1,1}, 3);
+    }
+
+    public static int numberOfAlternatingGroups(int[] colors, int k) {
+        if (colors.length<k) return 0;
+        List<Integer> result = new ArrayList<>();
+
+        int currLen =1;
+        int prev = colors[0];
+
+        for (int i =1; i<colors.length; i++){
+            if (colors[i]!=prev){
+                prev=colors[i];
+                currLen++;
+            }
+            else{
+                result.add(currLen);
+                currLen=1;
+            }
+        }
+
+        if (currLen>1) result.add(currLen);
+
+        if (result.size()==0) return 0;
+
+        int size = result.size();
+
+        if (colors[0]!=colors[colors.length-1]){
+            Integer sum  = 0;
+            if (result.size()==1) sum = result.get(0)+1;
+            else sum = result.get(0) + result.get(size-1);
+            result.set(0, sum);
+            result.remove(size-1);
+        }
+
+        int out =0;
+
+        for (Integer i : result){
+            if (i==k) out++;
+            else if (i>k){
+                out+=i-k+1;
+            }
+        }
+
+        return out;
     }
 
     public static int[] plusOne(int[] digits) {
