@@ -1,6 +1,0 @@
-{"addressList":[{"homeNumber":1,"street":"Moscow"}],"age":"124","email":"201@mail.ru"}
-
- udhd
- jsnj
-
- mdmd
