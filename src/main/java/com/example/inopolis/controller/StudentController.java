@@ -3,7 +3,6 @@ package com.example.inopolis.controller;
 import com.example.inopolis.aspect.AroundAnnotation;
 import com.example.inopolis.model.dto.StudentDTO;
 import com.example.inopolis.service.StudentService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class StudentController {
 
     @AroundAnnotation
     @PostMapping(value = "/add-student")
-    public Mono<ResponseEntity<StudentDTO>> addStudent(@RequestBody @Valid StudentDTO student) {
+    public Mono<ResponseEntity<StudentDTO>> addStudent(@RequestBody StudentDTO student) {
         return service.registerStudent(student).map(ResponseEntity::ok);
     }
 
