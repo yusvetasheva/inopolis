@@ -10,6 +10,8 @@ import com.example.inopolis.model.entity.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.*;
 
@@ -29,109 +31,98 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDTO> getAllStudents() {
-        List<StudentEntity> entityList = repository.findAll();
-        if (entityList.isEmpty()) return new ArrayList<StudentDTO>();
-        return entityList.stream().map(studentMapper::entityToDto).toList();
+    public Flux<StudentDTO> getAllStudents() {
+        return repository.findAll().map(studentMapper::entityToDto);
     }
 
     @Override
-    public List<StudentDTO> getStudentsByCourse(String courseName) {
+    public Flux<StudentDTO> getStudentsByCourse(String courseName) {
         if (courseName == null || courseName.isEmpty())
-            throw new IllegalArgumentException("courseName не может быть пустым в методе getStudentsByCourse");
+            return Flux.error(new IllegalArgumentException("courseName не может быть пустым в методе getStudentsByCourse"));
 
-        List<StudentEntity> studentOnCourseList = repository.findStudentsByCourse(courseName);
-
-        return studentOnCourseList.isEmpty() ?
-                Collections.emptyList() :
-                studentOnCourseList.stream().map(studentMapper::entityToDto).toList();
+        return repository.findStudentsByCourse(courseName).map(studentMapper::entityToDto);
     }
 
     @Override
-    public List<StudentDTO> getStudentWithSuchCoursesAmount(int amount) {
-        List<StudentEntity> studentEntityList =
-                repository.findStudentWithSuchCoursesAmount(amount);
-
-        if (studentEntityList ==null || studentEntityList.isEmpty()) return Collections.emptyList();
-
-        return studentEntityList.stream().map(studentMapper::entityToDto).toList();
+    public Flux<StudentDTO> getStudentWithSuchCoursesAmount(int amount) {
+        return repository.findStudentWithSuchCoursesAmount(amount).map(studentMapper::entityToDto);
     }
 
     @Override
-    public List<StudentDTO> getStudentsWithCoursesLike(String course) {
-        List<StudentEntity> studentEntityList= repository.findStudentsWithCoursesLike(course);
-
-        if (studentEntityList==null || studentEntityList.isEmpty()) return  Collections.emptyList();
-        return studentEntityList.stream().map(studentMapper::entityToDto).toList();
+    public Mono<StudentDTO> registerStudent(StudentDTO studentDTO) {
+        repository.save(studentMapper.dtoToEntity(studentDTO));
+        return Mono.just(studentDTO);
     }
 
     @Override
-    public StudentDTO registerStudent(StudentDTO studentDTO) {
-        StudentEntity entity = studentMapper.dtoToEntity(studentDTO);
-        repository.save(entity);
-        return studentMapper.entityToDto(entity);
+    public Mono<StudentDTO> updateStudent(Integer id, StudentDTO newStudent) {
+        if (id == null)
+            return Mono.error(new IllegalArgumentException("id в методе updateStudent не может быть null"));
+
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(new NoSuchElementException("Нет студента с id = " + id)))
+                .flatMap(student -> {
+                    student.setFio(newStudent.getFio());
+                    student.setEmail(newStudent.getEmail());
+                    return repository.save(student);
+                })
+                .map(studentMapper::entityToDto);
+
     }
 
     @Override
-    public StudentDTO updateStudent(Integer id, StudentDTO newStudent) {
-        if (id == null) throw new IllegalArgumentException("id в методе updateStudent не может быть null");
-        Optional<StudentEntity> existEntity = repository.findById(id);
-        if (existEntity.isEmpty())
-            throw new NoSuchElementException("Нет студента с id = " + id);
-        ;
+    public Mono<StudentDTO> deleteStudent(Integer id) {
+        if (id == null) return
+                Mono.error(new IllegalArgumentException("id в методе updateStudent не может быть null"));
 
-        existEntity.get().setFio(newStudent.getFio());
-        existEntity.get().setEmail(newStudent.getEmail());
-        repository.save(existEntity.get());
+        Mono<StudentEntity>existStudent = repository.findById(id)
+                .switchIfEmpty(Mono.error(new NoSuchElementException("В БД нет элемента с id = " + id)));
 
-        newStudent.setId(id);
-        return newStudent;
-    }
-
-    @Override
-    public StudentDTO deleteStudent(Integer id) {
-        if (id == null) throw new IllegalArgumentException("id в методе updateStudent не может быть null");
-        Optional<StudentEntity> existStudent = repository.findById(id);
-        if (existStudent.isEmpty()) throw new NoSuchElementException("В БД нет элемента с id = " + id);
         repository.deleteById(id);
-        return studentMapper.entityToDto(existStudent.get());
+        return existStudent.map(studentMapper::entityToDto);
     }
 
     @Override
-    public String addCourseToStudent(AddCourseToStudentRequest request) {
+    public Mono<String> addCourseToStudent(AddCourseToStudentRequest request) {
         if (request.getStudentId() == null)
-            throw new IllegalArgumentException("studentId в методе addCourseToStudent не может быть null");
+             throw new IllegalArgumentException("studentId в методе addCourseToStudent не может быть null");
         if (request.getCourse() == null || request.getCourse().isEmpty())
             throw new IllegalArgumentException("course в методе addCourseToStudent не может быть null/empty");
 
-        StudentEntity existStudent = repository.findById(request.getStudentId())
-                .orElseThrow(() -> new NoSuchElementException("Нет студента с id = " + request.getStudentId()));
+        String result = "";
 
-        //Проверяем, существует ли добавляемый курс
-        CourseDTO existCourse = null;
-        try {
-            existCourse = restClient.checkCourseIsExist(request.getCourse());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+        repository.findById(request.getStudentId())
+                .switchIfEmpty(Mono.error(new NoSuchElementException("Нет студента с id = " + request.getStudentId())))
+                .flatMap(exist->{
 
-        if (existCourse != null && existCourse.getIsActive()) {
+                    CourseDTO existCourse = null;
+                    try {
+                        existCourse = restClient.checkCourseIsExist(request.getCourse());
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
 
-            //Если студент уже записан на данный курс, выводим об этом сообщение
-            //Если нет - добавляем курс студенту
-            if (existStudent.getCourses().contains(request.getCourse()))
-                return "Повтор";
+                    if (existCourse != null && existCourse.getIsActive()) {
 
-            existStudent.getCourses().add(request.getCourse());
-            repository.save(existStudent);
-            return "Успех";
-        } else return "Данный курс не активен";
+                        //Если студент уже записан на данный курс, выводим об этом сообщение
+                        //Если нет - добавляем курс студенту
+                        if (exist.getCourses().contains(request.getCourse()))
+                            return Mono.just("Повтор");
+
+                        exist.getCourses().add(request.getCourse());
+                        repository.save(exist);
+                        return Mono.just("Успех");
+                    } else return Mono.just("Данный курс не активен");
+                });
+
+        return Mono.empty();
+
     }
 
     @Override
-    public CourseDTO addCommentToCourse(AddCommentToCourseRequest request) {
+    public Mono<CourseDTO> addCommentToCourse(AddCommentToCourseRequest request) {
 
-        return restClient.addCommentToCourse(request);
+        return Mono.just(restClient.addCommentToCourse(request));
     }
 
 }

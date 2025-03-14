@@ -7,8 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/api/student")
@@ -22,33 +22,39 @@ public class StudentController {
 
     @AroundAnnotation
     @PostMapping(value = "/add-student")
-    public ResponseEntity<StudentDTO> addStudent(@RequestBody @Valid StudentDTO student) {
-        return ResponseEntity.ok(service.registerStudent(student));
+    public Mono<ResponseEntity<StudentDTO>> addStudent(@RequestBody @Valid StudentDTO student) {
+        return service.registerStudent(student).map(ResponseEntity::ok);
     }
 
     @GetMapping(value = "/get-with-such-course-amount/{amount}")
-    public ResponseEntity<List<StudentDTO>> getStudentWithSuchCoursesAmount(@PathVariable int amount){
-        return ResponseEntity.ok(service.getStudentWithSuchCoursesAmount(amount));
+    public ResponseEntity<Flux<StudentDTO>> getStudentWithSuchCoursesAmount(@PathVariable int amount) {
+        Flux<StudentDTO> studentList = service.getStudentWithSuchCoursesAmount(amount);
+
+        return ResponseEntity.ok(studentList);
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id, @RequestBody StudentDTO student) {
-        return new ResponseEntity<>(service.updateStudent(id, student), HttpStatus.OK);
+    public Mono<ResponseEntity<StudentDTO>> updateStudent(@PathVariable Integer id, @RequestBody StudentDTO student) {
+        return service.updateStudent(id, student)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<StudentDTO> deleteStudent(@PathVariable Integer id) {
-        return new ResponseEntity<>(service.deleteStudent(id), HttpStatus.OK);
+    public Mono<ResponseEntity<StudentDTO>> deleteStudent(@PathVariable Integer id) {
+        return service.deleteStudent(id)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping(value = "/get-all")
-    public ResponseEntity<List<StudentDTO>> getAllStudent() {
+    public ResponseEntity<Flux<StudentDTO>> getAllStudent() {
         return new ResponseEntity<>(service.getAllStudents(), HttpStatus.OK);
     }
 
     @AroundAnnotation
     @GetMapping(value = "/get-student-by-course/{courseName}")
-    public ResponseEntity<List<StudentDTO>> getStudentsByCourse(@PathVariable String courseName) {
+    public ResponseEntity<Flux<StudentDTO>> getStudentsByCourse(@PathVariable String courseName) {
         return new ResponseEntity<>(service.getStudentsByCourse(courseName), HttpStatus.OK);
     }
 

@@ -1,30 +1,29 @@
 package com.example.inopolis.model.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "student_final")
+@Table(name = "student_flux")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentEntity {
     @Id
-    @Column(name = "id")
+    @Column("id")
     Integer id;
-    @Column(name = "fio")
+    @Column("fio")
     String fio;
-    @Column(name = "email")
+    @Column("email")
     String email;
-    @ElementCollection
-    @CollectionTable(name = "student_courses", joinColumns = @JoinColumn(name = "student_id"))
-    @Column(name = "course")
+    @Column("courses_list")
     List<String> courses = new ArrayList<>();
 }
