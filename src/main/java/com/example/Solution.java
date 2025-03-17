@@ -12,23 +12,34 @@ class Solution {
 
         int unic = 0;
 
-        Set<Integer> set = new HashSet<>();
 
-        for (int i = 0; i < arr.length; i++)
-            set.add(arr[i]);
-
-        unic= set.size();
+        System.out.println(maximumSwap(98368));
 
 
-        int result = 0;
+    }
 
-        while(unic>0){
-            result+=fact(unic);
-            unic--;
+    public static int maximumSwap(int num) {
+
+        char [] sign = String.valueOf(num).toCharArray();
+        char [] sorted = sign.clone();
+        char max;
+        Arrays.sort(sorted);
+
+        int index =0;
+
+
+        for (int i=0; i<sign.length; i++){
+            max = sorted[sign.length-i-1];
+
+            if (sign[i]<max){
+                index = (new String(sign)).indexOf(max);
+                sign[index] = sign[i];
+                sign[i] = max;
+                break;
+            }
         }
 
-        System.out.println(unic);
-
+        return Integer.parseInt(new String(sign));
 
     }
 
