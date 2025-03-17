@@ -20,4 +20,7 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
     @Query("SELECT st FROM StudentEntity st JOIN st.courses c WHERE c LIKE CONCAT('%', :course, '%')")
     List<StudentEntity> findStudentsWithCoursesLike(@Param("course") String course);
 
+    @Query("SELECT st.courses FROM StudentEntity st WHERE st.id = :studentId")
+    List<String> getCoursesById(Integer studentId);
+
 }
