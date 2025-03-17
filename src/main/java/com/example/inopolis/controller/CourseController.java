@@ -5,21 +5,20 @@ import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.aspect.AroundAnnotation;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.dto.StudentDTO;
+import com.example.inopolis.service.CourseService;
 import com.example.inopolis.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/api/student")
 public class CourseController {
 
-    private final StudentService service;
+    private final CourseService service;
 
-    public CourseController(StudentService service) {
+    public CourseController(CourseService service) {
         this.service = service;
     }
 
@@ -33,11 +32,6 @@ public class CourseController {
             return ResponseEntity.ok("Студент с id = " + request.getStudentId() + " уже записан на курс " + request.getCourse());
         else
             return ResponseEntity.badRequest().body(result);
-    }
-
-    @GetMapping(value = "/get-course-like")
-    public ResponseEntity<List<StudentDTO>> getStudentsWithCoursesLike(@RequestParam String courseName){
-        return ResponseEntity.ok(service.getStudentsWithCoursesLike(courseName));
     }
 
     @PostMapping(value = "/add-comment")

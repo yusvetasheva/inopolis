@@ -1,6 +1,7 @@
 package com.example.inopolis.controller;
 
 import com.example.courses.model.dto.CourseDTO;
+import com.example.inopolis.controller.security.SecurityTestConfig;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.dto.StudentDTO;
 import com.example.inopolis.service.StudentServiceImpl;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * мокаются с помощью @MockBean.
  */
 @WebMvcTest(StudentController.class)
+@Import(SecurityTestConfig.class)
 public class StudentControllerTest {
 
     @Autowired
@@ -36,51 +39,6 @@ public class StudentControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Test
-    public void addCourseToStudent_SuccessTest() throws Exception {
-
-        when(service.addCourseToStudent(any())).thenReturn("Успех");
-
-        mockMvc.perform(post("/api/student/add-course")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(AddCourseToStudentRequest.builder().course("test").studentId(0).build())))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Курс test успешно добавлен студенту с id = 0"));
-
-        verify(service, times(1)).addCourseToStudent(any());
-
-    }
-
-    @Test
-    public void addCourseToStudent_RepeatTest() throws Exception {
-
-        when(service.addCourseToStudent(any())).thenReturn("Повтор");
-
-        mockMvc.perform(post("/api/student/add-course")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(AddCourseToStudentRequest.builder().course("test").studentId(0).build())))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Студент с id = 0 уже записан на курс test"));
-
-        verify(service, times(1)).addCourseToStudent(any());
-
-    }
-
-    @Test
-    public void addCourseToStudent_ErrorTest() throws Exception {
-
-        when(service.addCourseToStudent(any())).thenReturn("Данный курс не активен");
-
-        mockMvc.perform(post("/api/student/add-course")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(AddCourseToStudentRequest.builder().course("test").studentId(0).build())))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Данный курс не активен"));
-
-        verify(service, times(1)).addCourseToStudent(any());
-
-    }
 
     @Test
     public void getStudentWithSuchCoursesAmount_SuccessTest() throws Exception {

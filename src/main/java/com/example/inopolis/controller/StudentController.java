@@ -52,4 +52,9 @@ public class StudentController {
         return new ResponseEntity<>(service.getStudentsByCourse(courseName), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/get-course-like")
+    public ResponseEntity<List<StudentDTO>> getStudentsWithCoursesLike(@RequestParam String courseName){
+        return ResponseEntity.ok(service.getStudentsWithCoursesLike(courseName));
+    }
+
 }

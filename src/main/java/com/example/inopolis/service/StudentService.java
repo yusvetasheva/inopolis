@@ -21,8 +21,4 @@ public interface StudentService {
 
     StudentDTO deleteStudent(Integer id);
 
-    String addCourseToStudent(AddCourseToStudentRequest request);
-
-    CourseDTO addCommentToCourse(AddCommentToCourseRequest request);
-
 }

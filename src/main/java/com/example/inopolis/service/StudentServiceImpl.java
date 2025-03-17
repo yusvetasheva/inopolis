@@ -21,11 +21,8 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository repository;
 
-    private final CourseRestClientApi restClient;
-
-    public StudentServiceImpl(StudentRepository repository, CourseRestClientApi restClient) {
+    public StudentServiceImpl(StudentRepository repository) {
         this.repository = repository;
-        this.restClient = restClient;
     }
 
     @Override
@@ -52,16 +49,16 @@ public class StudentServiceImpl implements StudentService {
         List<StudentEntity> studentEntityList =
                 repository.findStudentWithSuchCoursesAmount(amount);
 
-        if (studentEntityList ==null || studentEntityList.isEmpty()) return Collections.emptyList();
+        if (studentEntityList == null || studentEntityList.isEmpty()) return Collections.emptyList();
 
         return studentEntityList.stream().map(studentMapper::entityToDto).toList();
     }
 
     @Override
     public List<StudentDTO> getStudentsWithCoursesLike(String course) {
-        List<StudentEntity> studentEntityList= repository.findStudentsWithCoursesLike(course);
+        List<StudentEntity> studentEntityList = repository.findStudentsWithCoursesLike(course);
 
-        if (studentEntityList==null || studentEntityList.isEmpty()) return  Collections.emptyList();
+        if (studentEntityList == null || studentEntityList.isEmpty()) return Collections.emptyList();
         return studentEntityList.stream().map(studentMapper::entityToDto).toList();
     }
 
@@ -95,43 +92,6 @@ public class StudentServiceImpl implements StudentService {
         if (existStudent.isEmpty()) throw new NoSuchElementException("В БД нет элемента с id = " + id);
         repository.deleteById(id);
         return studentMapper.entityToDto(existStudent.get());
-    }
-
-    @Override
-    public String addCourseToStudent(AddCourseToStudentRequest request) {
-        if (request.getStudentId() == null)
-            throw new IllegalArgumentException("studentId в методе addCourseToStudent не может быть null");
-        if (request.getCourse() == null || request.getCourse().isEmpty())
-            throw new IllegalArgumentException("course в методе addCourseToStudent не может быть null/empty");
-
-        StudentEntity existStudent = repository.findById(request.getStudentId())
-                .orElseThrow(() -> new NoSuchElementException("Нет студента с id = " + request.getStudentId()));
-
-        //Проверяем, существует ли добавляемый курс
-        CourseDTO existCourse = null;
-        try {
-            existCourse = restClient.checkCourseIsExist(request.getCourse());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-
-        if (existCourse != null && existCourse.getIsActive()) {
-
-            //Если студент уже записан на данный курс, выводим об этом сообщение
-            //Если нет - добавляем курс студенту
-            if (existStudent.getCourses().contains(request.getCourse()))
-                return "Повтор";
-
-            existStudent.getCourses().add(request.getCourse());
-            repository.save(existStudent);
-            return "Успех";
-        } else return "Данный курс не активен";
-    }
-
-    @Override
-    public CourseDTO addCommentToCourse(AddCommentToCourseRequest request) {
-
-        return restClient.addCommentToCourse(request);
     }
 
 }
