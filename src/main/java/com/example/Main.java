@@ -15,17 +15,113 @@ public class Main {
 
 
     public static void main(String[] args) {
-        System.out.println(check2());
+        isHappy(19);
 
+    }
+
+    /**
+     * На вход массив банок, которые нужно слить в бидоны (банку можно слить только целиком)
+     * и количество бидонов неизвестного объема
+     * Какой должен быть минимальный объем каждого бидона, чтобы все банки можно ыбл в них слить
+     */
+    public static int getVolume() {
+        int[] banki = {1, 8, 7, 5, 6, 7, 8, 9, 3, 4};
+        int count = 4;
+        int max = Integer.MIN_VALUE;
+
+        int sum = 0;
+        int result = 0;
+
+        for (int i : banki) {
+            sum += i;
+            if (max < i) max = i;
+        }
+
+        //Тут важно учитывать, что банку нужно слить целиком и нужно, чтобы самая  большая банка уместилась
+        result = sum / count;
+        if (sum % count > 0) result++;
+
+
+        return Math.max(result, max);
+
+    }
+
+
+    /**
+     * на вход 2 элемента
+     * масиив банок, которые нужно слить в бидон (банка всегда выливается целиком в бидон)
+     * и объем бидона
+     * Сколько минимально нужно бидонов, чтобы слить в них все банки
+     */
+
+    public static int banka() {
+        int[] banki = {1, 9, 8, 5, 10, 4, 7};
+        int bedon = 12;
+
+        int result = 0;
+        int curr = 0;
+
+        for (int i : banki) {
+            if (curr + i > bedon) {
+                result++;
+                curr = i;
+            } else curr += i;
+        }
+
+        if (curr > 0) result++;
+
+        return result;
+    }
+
+    /**
+     * Дана последовательность неотрицательных целых чисел
+     * Нужно переставить нули в конец, не меняя порядок других чисел
+     * [1,0,2,3.0,0]->[1,2,3,0,0,0]
+     */
+
+    public static int[] reverseArray() {
+        int[] nums = {1, 0, 2, 0, 4, 5, 6};
+        int[] result = new int[nums.length];
+
+        int index = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                result[index] = nums[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
+
+    public static boolean isHappy(int n) {
+
+        Set<Integer> set = new HashSet<>();
+
+        while (n != 1 && !set.contains(n)) {
+            set.add(n);
+            n = digitSqr(n);
+        }
+        return n == 1;
+    }
+
+    public static int digitSqr(int digit) {
+        int result = 0;
+        while (digit > 0) {
+            result += digit % 10 * digit % 10;
+            digit /= 10;
+        }
+        return result;
     }
 
     //Дан массив строк. Напишите функцию,
     // которая находит первую повторяющуюся букву.
-    public static String check4(){
-        String [] array = {"a", "b", "a"};
+    public static String check4() {
+        String[] array = {"a", "b", "a"};
         Set<String> set = new HashSet<>();
 
-        for (String i : array){
+        for (String i : array) {
             if (!set.add(i)) {
                 return i;
             }
@@ -36,13 +132,13 @@ public class Main {
 
     //Дан массив строк. Напишите функцию,
     // которая находит слово с максимальной частотой появления.
-    public static void check3(){
-        String [] array = {"q", "s", "x", "q"};
+    public static void check3() {
+        String[] array = {"q", "s", "x", "q"};
 
         Map<String, Integer> map = Arrays.stream(array).collect(
                 Collectors.toMap(
-                        i->i,
-                        i->1,
+                        i -> i,
+                        i -> 1,
                         Integer::sum
                 )
         );
@@ -50,8 +146,8 @@ public class Main {
         int max = -1;
         String result = "";
 
-        for (Map.Entry<String, Integer> i: map.entrySet()){
-            if (i.getValue()>max){
+        for (Map.Entry<String, Integer> i : map.entrySet()) {
+            if (i.getValue() > max) {
                 max = i.getValue();
                 result = i.getKey();
             }
