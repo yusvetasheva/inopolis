@@ -15,8 +15,117 @@ public class Main {
 
 
     public static void main(String[] args) {
-        isHappy(19);
+        findMaxSubarray();
 
+    }
+
+    /**
+     * Условие задачи:
+     * дан связный список (linked list), поменять порядок элементов на противоположный.
+     *
+     * Примеры:
+     * Вход: 1->2->3->4->5, Выход: 5->4->3->2->1
+     * Вход: 1, Выход: 1
+     * */
+
+
+    public static LinkedList<Integer> reverseList(){
+        LinkedList <Integer> list = new LinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+
+        LinkedList <Integer> temp = new LinkedList<>();
+
+        for (Integer i : list){
+            temp.addFirst(i);
+        }
+
+        return temp;
+
+    }
+
+    /**
+     * Есть мультимапа и ее нужно развернуть
+     * */
+
+
+
+    /**
+     * Задан отрезок. Нужно найти максимальную длину хорошего подотрезка
+     * Хороший подотрезок = последовательность, в которой не больше k различных элементов
+     */
+
+    public static int findGood() {
+        int[] nums = {1, 2, 23, 4, 3, 2, 2, 4, 5, 65};
+        int k = 3;
+
+        int currUnic = 0;
+        int maxLen = 0;
+
+        List<Integer> list = new ArrayList<>();
+        Set<Integer> set = new HashSet<>();
+
+        int left = 0;
+        int right = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            //Если элемент уникален, и текущее количество уникальных элементов позволяет, то расширяем список
+            if (!list.contains(nums[i]) && currUnic < k) {
+                list.add(nums[i]);
+                currUnic++;
+            }
+            else if (list.contains(nums[i])) {
+                list.add(nums[i]);
+                if (list.get(left)==nums[i])
+                    right = i;
+            }
+            //Если элемент уникален, и текущее количество уникальных элементов переполнено
+            // двигаем левую границу пока не избавимся от одного элемента в списке (от всех его вхождений)
+            else if (!list.contains(nums[i]) && currUnic >= k) {
+                list.subList(left, right).clear();
+                set.addAll(list);
+                currUnic = set.size();
+                left = right+1;
+                right = left;
+            }
+
+            if (list.size()>maxLen)
+                maxLen = list.size();
+        }
+        return maxLen;
+
+    }
+
+    /**
+     * Дан массив целых чисел
+     * нужно найти подмассив с наибольшей суммой элементов
+     * вывести левую границу, правую границу и сумму
+     */
+    public static int[] findMaxSubarray() {
+        int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        int left = 0;
+        int right = 0;
+        int max = Integer.MIN_VALUE;
+        int curr = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            curr += nums[i];
+
+            if (curr > max) {
+                max = curr;
+                right = i;
+            } else if (curr < 0) {
+                curr = 0;
+                left = i + 1;
+                right = i + 1;
+            }
+        }
+
+        int[] result = {left, right, max};
+        return result;
     }
 
     /**
