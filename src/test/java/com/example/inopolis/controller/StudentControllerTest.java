@@ -50,7 +50,6 @@ public class StudentControllerTest {
         mockMvc.perform(get("/api/student/get-with-such-course-amount/{amount}", 2)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(3))
                 .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
                 .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
 
@@ -66,7 +65,6 @@ public class StudentControllerTest {
                         .param("courseName", "course")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(3))
                 .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
                 .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
 
@@ -98,7 +96,6 @@ public class StudentControllerTest {
         mockMvc.perform(get("/api/student/get-all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(3))
                 .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
                 .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
 
@@ -115,7 +112,6 @@ public class StudentControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].fio").value("Петров Петр Петрович"))
-                .andExpect(jsonPath("$[0].id").value(3))
                 .andExpect(jsonPath("$[0].email").value("petrov200@gmail.com"));
 
     }
@@ -147,7 +143,6 @@ public class StudentControllerTest {
 
     public StudentDTO getStudentDto() {
         return StudentDTO.builder()
-                .id(3)
                 .fio("Петров Петр Петрович")
                 .email("petrov200@gmail.com")
                 .build();

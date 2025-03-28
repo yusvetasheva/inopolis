@@ -1,11 +1,10 @@
 package com.example.inopolis.controller;
 
+import com.example.inopolis.model.dto.StudentRegistrationDTO;
 import com.example.inopolis.service.LKService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +18,12 @@ public class LKController {
     }
 
     @GetMapping(value = "/get-all-courses/{studentId}")
-    ResponseEntity<List<String>> getStudentCourses(@PathVariable Integer studentId){
-        return  ResponseEntity.ok(lkService.getStudentCourses(studentId));
+    ResponseEntity<List<String>> getStudentCourses(@PathVariable Integer studentId) {
+        return ResponseEntity.ok(lkService.getStudentCourses(studentId));
+    }
+
+    @PostMapping(value = "/register-security")
+    ResponseEntity<String> registerStudent(@RequestBody @Valid StudentRegistrationDTO registrationDTO) {
+        return lkService.registerStudent(registrationDTO.getEmail(), registrationDTO.getPassword());
     }
 }

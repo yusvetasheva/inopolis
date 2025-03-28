@@ -13,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentDTO {
-    Integer id;
     @NotBlank(message = "Поле fio не может быть пустым")
     @Pattern(regexp = "^[А-Яа-яA-Za-z\\s-]+$", message = "ФИО может содержать только буквы")
     String fio;

@@ -20,8 +20,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/lk/**").authenticated()
-                .requestMatchers("/api/student/**").permitAll() // Все остальные запросы разрешены
+                .requestMatchers("/api/lk/get-all-courses/**").authenticated()
+                .anyRequest().permitAll() // Все остальные запросы разрешены
                 .and()
                 .httpBasic(); // Включаем Basic Authentication
 
@@ -30,7 +30,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // Настройка пользователей с логинами и паролями
+        // Настройка пользователей с логинами и паролям
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("user")
                 .password(passwordEncoder().encode("password"))

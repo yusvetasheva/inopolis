@@ -18,9 +18,8 @@ public class SecurityTestConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/api/lk/**").authenticated()
-                .requestMatchers("/api/student/**").permitAll()  // Разрешаем доступ без авторизации
-                .anyRequest().authenticated()  // Остальные запросы требуют авторизации
+                .requestMatchers("/api/lk/get-all-courses/**").authenticated()
+                .anyRequest().permitAll()  // Остальные запросы требуют авторизации
                 .and()
                 .httpBasic(); // Включаем Basic Authentication для других запросов
 

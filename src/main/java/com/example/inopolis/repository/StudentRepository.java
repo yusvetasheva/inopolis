@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<StudentEntity, Integer> {
@@ -22,5 +23,8 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
 
     @Query("SELECT st.courses FROM StudentEntity st WHERE st.id = :studentId")
     List<String> getCoursesById(Integer studentId);
+
+    @Query("SELECT st FROM StudentEntity st WHERE st.email = :email")
+    Optional<StudentEntity> getStudentByEmail(String email);
 
 }
