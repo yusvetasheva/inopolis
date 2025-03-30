@@ -26,4 +26,9 @@ public class LKController {
     ResponseEntity<String> registerStudent(@RequestBody @Valid StudentRegistrationDTO registrationDTO) {
         return lkService.registerStudent(registrationDTO.getEmail(), registrationDTO.getPassword());
     }
+
+    @PostMapping(value = "/register-db")
+    ResponseEntity<String> registerWithDB(@RequestBody @Valid StudentRegistrationDTO registrationDTO) {
+        return lkService.registerUserWithDB(registrationDTO.getEmail(), registrationDTO.getPassword());
+    }
 }

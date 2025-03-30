@@ -17,7 +17,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     Integer id;
     @Column(name = "fio")
@@ -28,7 +28,6 @@ public class StudentEntity {
     @CollectionTable(name = "student_courses", joinColumns = @JoinColumn(name = "student_id"))
     @Column(name = "course")
     List<String> courses = new ArrayList<>();
-
     @Column(name = "passwordHash")
     String passwordHash;
 }

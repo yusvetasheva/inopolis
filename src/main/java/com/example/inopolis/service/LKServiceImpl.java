@@ -4,6 +4,7 @@ import com.example.inopolis.model.entity.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
 import com.example.inopolis.security.HashPasswordService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +15,13 @@ public class LKServiceImpl implements LKService {
 
     private final StudentRepository repository;
 
+    private final JdbcTemplate jdbcTemplate;
+
     private final HashPasswordService hashPasswordService;
 
-    public LKServiceImpl(StudentRepository repository, HashPasswordService hashPasswordService) {
+    public LKServiceImpl(StudentRepository repository, JdbcTemplate jdbcTemplate, HashPasswordService hashPasswordService) {
         this.repository = repository;
+        this.jdbcTemplate = jdbcTemplate;
         this.hashPasswordService = hashPasswordService;
     }
 
@@ -40,5 +44,18 @@ public class LKServiceImpl implements LKService {
         }
 
         return ResponseEntity.badRequest().body("Студент с email = " + email + " уже существует");
+    }
+
+    @Override
+    public ResponseEntity<String> registerUserWithDB(String email, String password) {
+        String hashedPassword = hashPasswordService.hashPassword(password);
+
+        jdbcTemplate.update(
+                "INSERT INTO student_final (email, password_hash) VALUES (?, ?)",
+                email, hashedPassword
+        );
+
+
+        return ResponseEntity.ok("Успешная регистрация через БД");
     }
 }

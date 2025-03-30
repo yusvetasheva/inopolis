@@ -10,7 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -23,23 +26,21 @@ public class SecurityConfig {
                 .requestMatchers("/api/lk/get-all-courses/**").authenticated()
                 .anyRequest().permitAll() // Все остальные запросы разрешены
                 .and()
+                .formLogin()
+                .and()
                 .httpBasic(); // Включаем Basic Authentication
 
         return http.build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        // Настройка пользователей с логинами и паролям
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .build());
-        manager.createUser(User.withUsername("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build());
+    public UserDetailsService userDetailsService(DataSource dataSource) {
+        JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
+
+        // Указываем кастомные SQL-запросы для получения пользователя и его ролей
+        manager.setUsersByUsernameQuery("SELECT email, password_hash FROM student_final WHERE email = ?");
+        manager.setAuthoritiesByUsernameQuery("SELECT email, 'ROLE_USER' FROM students WHERE email = ?");
+
         return manager;
     }
 
