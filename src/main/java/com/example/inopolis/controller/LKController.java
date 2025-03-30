@@ -22,13 +22,8 @@ public class LKController {
         return ResponseEntity.ok(lkService.getStudentCourses(studentId));
     }
 
-    @PostMapping(value = "/register-security")
-    ResponseEntity<String> registerStudent(@RequestBody @Valid StudentRegistrationDTO registrationDTO) {
-        return lkService.registerStudent(registrationDTO.getEmail(), registrationDTO.getPassword());
-    }
-
     @PostMapping(value = "/register-db")
     ResponseEntity<String> registerWithDB(@RequestBody @Valid StudentRegistrationDTO registrationDTO) {
-        return lkService.registerUserWithDB(registrationDTO.getEmail(), registrationDTO.getPassword());
+        return lkService.registerStudent(registrationDTO.getEmail(), registrationDTO.getPassword());
     }
 }

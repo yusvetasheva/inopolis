@@ -35,27 +35,26 @@ public class LKServiceImpl implements LKService {
 
     @Override
     public ResponseEntity<String> registerStudent(String email, String password) {
-        String hashPassword = hashPasswordService.hashPassword(password);
+        String hashedPassword = hashPasswordService.hashPassword(password);
 
         Optional<StudentEntity> exist = repository.getStudentByEmail(email);
         if (exist.isEmpty()) {
-            repository.save(StudentEntity.builder().email(email).passwordHash(hashPassword).build());
+            jdbcTemplate.update(
+                    "INSERT INTO users (username, password, enabled) VALUES (?, ?, ?)",
+                    email, hashedPassword, true
+            );
+
+            jdbcTemplate.update(
+                    "INSERT INTO authorities (username, authority) VALUES (?, ?)",
+                    email, "ROLE_USER"
+            );
+
+            repository.save(StudentEntity.builder().email(email).passwordHash(hashedPassword).build());
+
             return ResponseEntity.ok("Студент с email = " + email + " успешно зарегистрирован");
         }
 
         return ResponseEntity.badRequest().body("Студент с email = " + email + " уже существует");
     }
 
-    @Override
-    public ResponseEntity<String> registerUserWithDB(String email, String password) {
-        String hashedPassword = hashPasswordService.hashPassword(password);
-
-        jdbcTemplate.update(
-                "INSERT INTO student_final (email, password_hash) VALUES (?, ?)",
-                email, hashedPassword
-        );
-
-
-        return ResponseEntity.ok("Успешная регистрация через БД");
-    }
 }

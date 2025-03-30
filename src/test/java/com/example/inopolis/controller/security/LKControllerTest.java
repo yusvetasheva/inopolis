@@ -55,7 +55,7 @@ public class LKControllerTest {
     public void registerStudent_BadRequest() throws Exception {
         when(service.registerStudent(any(), any())).thenReturn(ResponseEntity.ok().body("Студент успешно зарегистрирован"));
 
-        mockMvc.perform(post("/api/lk/register-security")
+        mockMvc.perform(post("/api/lk/register-db")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(StudentRegistrationDTO.builder().email("test").password("123").build())))
                 .andExpect(status().isBadRequest());
@@ -65,10 +65,10 @@ public class LKControllerTest {
     }
 
     @Test
-    public void registerStudent_Succes() throws Exception {
+    public void registerStudent_Success() throws Exception {
         when(service.registerStudent(any(), any())).thenReturn(ResponseEntity.ok().body("Студент успешно зарегистрирован"));
 
-        mockMvc.perform(post("/api/lk/register-security")
+        mockMvc.perform(post("/api/lk/register-db")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(StudentRegistrationDTO.builder()
                                 .email("svetashev200@gmail.com")

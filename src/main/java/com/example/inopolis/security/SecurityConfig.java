@@ -35,14 +35,9 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
-        JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
-
-        // Указываем кастомные SQL-запросы для получения пользователя и его ролей
-        manager.setUsersByUsernameQuery("SELECT email, password_hash FROM student_final WHERE email = ?");
-        manager.setAuthoritiesByUsernameQuery("SELECT email, 'ROLE_USER' FROM students WHERE email = ?");
-
-        return manager;
+        return new JdbcUserDetailsManager(dataSource);
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
