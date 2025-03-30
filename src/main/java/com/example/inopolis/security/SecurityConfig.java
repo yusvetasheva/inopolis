@@ -21,27 +21,37 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/lk/get-all-courses/**").authenticated()
-                .anyRequest().permitAll() // Все остальные запросы разрешены
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .requestMatchers("/api/task/get-all").hasAnyRole("VIEWER", "USER", "ADMIN")
+                .requestMatchers("/api/task/add").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/api/task/delete/{id}").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .and()
-                .httpBasic(); // Включаем Basic Authentication
+                .httpBasic();
 
         return http.build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Хеширование паролей с помощью BCrypt
+    public UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.withUsername("user_user")
+                .password("{noop}user123")
+                .roles("USER")
+                .build());
+        manager.createUser(User.withUsername("user_admin")
+                .password("{noop}admin123")
+                .roles("ADMIN")
+                .build());
+        manager.createUser(User.withUsername("user_viewer")
+                .password("{noop}viewer123")
+                .roles("VIEWER")
+                .build());
+        return manager;
     }
 }
 
