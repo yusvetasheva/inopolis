@@ -1,0 +1,26 @@
+package com.example.inopolis.model.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "request_logs")
+public class LogEntry {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String method;
+    private String uri;
+    private String authorizationHeader;
+    private String decodedAuthorization;
+    private LocalDateTime timestamp;
+}

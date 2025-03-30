@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
@@ -23,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests()
+                .authorizeHttpRequests()
                 .requestMatchers("/api/task/get-all").hasAnyRole("VIEWER", "USER", "ADMIN")
                 .requestMatchers("/api/task/add").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/task/delete/{id}").hasRole("ADMIN")
@@ -31,7 +32,10 @@ public class SecurityConfig {
                 .and()
                 .formLogin()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customBasicAuthEntryPoint());
 
         return http.build();
     }
@@ -52,6 +56,15 @@ public class SecurityConfig {
                 .roles("VIEWER")
                 .build());
         return manager;
+    }
+
+    @Bean
+    public AuthenticationEntryPoint customBasicAuthEntryPoint() {
+        return (request, response, authException) -> {
+            response.setStatus(401);
+            response.setHeader("WWW-Authenticate", "Basic realm=\"MyAppRealm\"");
+            response.getWriter().write("Unauthorized - Custom Realm");
+        };
     }
 }
 
