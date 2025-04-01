@@ -1,42 +1,33 @@
 package com.example.inopolis.controller;
 
-import com.example.inopolis.model.dto.TaskDTO;
-import com.example.inopolis.service.TaskService;
+import com.example.inopolis.model.dto.StoreDTO;
+import com.example.inopolis.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/task")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@RequestMapping(value = "/api/store")
 public class TaskController {
-    TaskService service;
 
-    public TaskController(TaskService service) {
-        this.service = service;
-    }
-
-    @GetMapping(value = "/get-all")
-    @PreAuthorize("hasAnyRole('VIEWER', 'USER', 'ADMIN')")
-    public ResponseEntity<List<TaskDTO>> getAll(){
-        return ResponseEntity.ok().body(service.getAllTasks());
-    }
+    StoreService service;
 
     @PostMapping(value = "/add")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<TaskDTO> addTask(@RequestBody @Valid TaskDTO task){
-        return service.addTask(task);
+    public ResponseEntity<StoreDTO> add(@RequestBody @Valid StoreDTO storeDTO){
+        return ResponseEntity.ok().body(service.addStore(storeDTO));
     }
 
-    @DeleteMapping(value = "/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<TaskDTO> deleteTask(@PathVariable Integer id){
-        return service.deleteTask(id);
-    }
 
+    @GetMapping(value = "/get-all")
+    public Page<StoreDTO> getAll(Pageable pageable) {
+        return service.getAllStore(pageable);
+    }
 }
