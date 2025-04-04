@@ -8,30 +8,66 @@ class Solution {
 
     public static void main(String[] args) {
 
-        int[] arr = new int[]{1, 2, 3, 4, 2, 3, 7, 8};
-
-        int unic = 0;
-
-
-        System.out.println(maximumSwap(98368));
+        System.out.println("   f ff     f   f    f".trim());
 
 
     }
 
+    public static int[][] mergeArrays(int[][] nums1, int[][] nums2) {
+        //значения id уникальны
+        Map<Integer, Integer> map = new HashMap<>();
+        int left1 = 0;
+        int left2 = 0;
+        while (left1 < nums1.length && left2 < nums2.length) {
+
+            if (nums1[left1][0] == nums2[left2][0]) {
+                map.put(nums1[left1][0], nums1[left1][1] + nums2[left2][1]);
+                left1++;
+                left2++;
+            } else if (nums1[left1][0] > nums2[left2][0]) {
+                map.put(nums2[left2][0], nums2[left2][1]);
+                left2++;
+            } else {
+                map.put(nums1[left1][0], nums1[left1][1]);
+                left1++;
+            }
+        }
+
+        while (left1 < nums1.length) {
+            map.put(nums1[left1][0], nums1[left1][1]);
+            left1++;
+        }
+        while (left2 < nums2.length) {
+            map.put(nums2[left2][0], nums2[left2][1]);
+            left2++;
+        }
+
+        int[][] result = new int[map.size()][2];
+        int index = 0;
+
+        for (Map.Entry<Integer, Integer> i : map.entrySet()) {
+            result[index][0] = i.getKey();
+            result[index][1] = i.getValue();
+        }
+
+        return result;
+    }
+
+
     public static int maximumSwap(int num) {
 
-        char [] sign = String.valueOf(num).toCharArray();
-        char [] sorted = sign.clone();
+        char[] sign = String.valueOf(num).toCharArray();
+        char[] sorted = sign.clone();
         char max;
         Arrays.sort(sorted);
 
-        int index =0;
+        int index = 0;
 
 
-        for (int i=0; i<sign.length; i++){
-            max = sorted[sign.length-i-1];
+        for (int i = 0; i < sign.length; i++) {
+            max = sorted[sign.length - i - 1];
 
-            if (sign[i]<max){
+            if (sign[i] < max) {
                 index = (new String(sign)).indexOf(max);
                 sign[index] = sign[i];
                 sign[i] = max;
