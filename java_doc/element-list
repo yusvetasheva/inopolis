@@ -1,0 +1,7 @@
+com.example
+com.example.controller
+com.example.model
+com.example.model.dto
+com.example.model.entity
+com.example.repository
+com.example.service
