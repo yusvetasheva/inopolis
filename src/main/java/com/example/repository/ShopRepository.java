@@ -1,15 +1,9 @@
 package com.example.repository;
 
-import com.example.model.Shop;
+import com.example.model.entity.ShopEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface ShopRepository {
-    List<Shop> getAllShops();
-
-    void addShop(Shop shop);
-
-    void updateShop(Shop shop);
-
-    void deleteShop(int id);
+@Repository
+public interface ShopRepository extends JpaRepository<ShopEntity, Integer> {
 }

@@ -1,14 +1,9 @@
 package com.example.repository;
 
-import com.example.model.Address;
+import com.example.model.entity.AddressEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface AddressRepository {
-    List<Address> getAllAddresses();
-    void addAddress(Address address);
-    Address getAddressById(int id);
-    void updateAddress(Address address);
-    void deleteAddress(int id);
-
+@Repository
+public interface AddressRepository extends JpaRepository<AddressEntity, Integer> {
 }

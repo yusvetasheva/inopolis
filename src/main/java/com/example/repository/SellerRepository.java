@@ -1,15 +1,9 @@
 package com.example.repository;
 
-import com.example.model.Seller;
+import com.example.model.entity.SellerEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface SellerRepository {
-    List<Seller> getAllSellers();
-
-    void addSeller(Seller seller);
-
-    void updateSeller(Seller seller);
-
-    void deleteSeller(int id);
+@Repository
+public interface SellerRepository extends JpaRepository<SellerEntity, Integer> {
 }

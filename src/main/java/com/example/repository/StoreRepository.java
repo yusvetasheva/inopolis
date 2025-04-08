@@ -1,15 +1,9 @@
 package com.example.repository;
 
-import com.example.model.Store;
+import com.example.model.entity.StoreEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface StoreRepository {
-    List<Store> getAllStores();
-
-    void addStore(Store store);
-
-    void updateStore(Store store);
-
-    void deleteStore(int id);
+@Repository
+public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 }
