@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,4 +23,7 @@ public class StoreEntity {
     AddressEntity address;
     Integer capacity;
     Integer fullness;
+    @OneToMany(targetEntity = ProductEntity.class, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @JoinColumn(name = "shop_id")
+    List<ProductEntity> products = new ArrayList<>();
 }

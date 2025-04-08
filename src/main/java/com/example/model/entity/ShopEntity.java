@@ -26,7 +26,4 @@ public class ShopEntity {
     @OneToOne(fetch = FetchType.LAZY, targetEntity = StoreEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "store_id")
     StoreEntity store;
-    @OneToMany(targetEntity = ProductEntity.class, cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "shop_id")
-    List<ProductEntity> products = new ArrayList<>();
 }
