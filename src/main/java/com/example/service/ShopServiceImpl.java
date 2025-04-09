@@ -4,6 +4,7 @@ import com.example.mapper.AddressMapper;
 import com.example.mapper.ShopMapper;
 import com.example.mapper.StoreMapper;
 import com.example.model.dto.ShopDTO;
+import com.example.model.entity.AddressEntity;
 import com.example.model.entity.ShopEntity;
 import com.example.repository.ShopRepository;
 import lombok.AccessLevel;
@@ -36,8 +37,9 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void deleteById(Integer id) {
-        getEntityById(id);
-        repository.deleteById(id);
+        ShopEntity exist = getEntityById(id);
+        exist.setIsDeleted(true);
+        repository.save(exist);
     }
 
     @Override

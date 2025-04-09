@@ -19,4 +19,13 @@ public class ProductEntity {
     Integer id;
     String name;
     String description;
+    @Column(name = "is_deleted")
+    Boolean isDeleted = false;
+
+    @PrePersist
+    public void prePersist() {
+        if (isDeleted == null) {
+            isDeleted = false;
+        }
+    }
 }

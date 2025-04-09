@@ -23,7 +23,16 @@ public class StoreEntity {
     AddressEntity address;
     Integer capacity;
     Integer fullness;
+    @Column(name = "is_deleted")
+    Boolean isDeleted = false;
     @OneToMany(targetEntity = ProductEntity.class, cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "shop_id")
     List<ProductEntity> products = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        if (isDeleted == null) {
+            isDeleted = false;
+        }
+    }
 }

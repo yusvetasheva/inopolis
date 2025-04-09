@@ -21,4 +21,13 @@ public class AddressEntity {
     String street;
     @Column(name = "number_of_build")
     String numberOfBuild;
+    @Column(name = "is_deleted")
+    Boolean isDeleted = false;
+
+    @PrePersist
+    public void prePersist() {
+        if (isDeleted == null) {
+            isDeleted = false;
+        }
+    }
 }

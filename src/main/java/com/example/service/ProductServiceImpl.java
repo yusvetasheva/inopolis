@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.mapper.ProductMapper;
 import com.example.model.dto.ProductDTO;
+import com.example.model.entity.AddressEntity;
 import com.example.model.entity.ProductEntity;
 import com.example.repository.ProductRepository;
 import lombok.AccessLevel;
@@ -32,8 +33,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteById(Integer id) {
-        findEntityById(id);
-        repository.deleteById(id);
+        ProductEntity exist = findEntityById(id);
+        exist.setIsDeleted(true);
+        repository.save(exist);
     }
 
     @Override

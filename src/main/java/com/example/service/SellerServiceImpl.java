@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.mapper.SellerMapper;
 import com.example.mapper.ShopMapper;
 import com.example.model.dto.SellerDTO;
+import com.example.model.entity.AddressEntity;
 import com.example.model.entity.SellerEntity;
 import com.example.repository.SellerRepository;
 import lombok.AccessLevel;
@@ -34,8 +35,9 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public void deleteById(Integer id) {
-        findEntityById(id);
-        repository.deleteById(id);
+        SellerEntity exist = findEntityById(id);
+        exist.setIsDeleted(true);
+        repository.save(exist);
     }
 
     @Override

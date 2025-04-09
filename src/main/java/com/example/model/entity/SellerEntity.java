@@ -24,4 +24,13 @@ public class SellerEntity {
     @JoinColumn(name = "shop_id")
     ShopEntity shop;
     Double salary;
+    @Column(name = "is_deleted")
+    Boolean isDeleted = false;
+
+    @PrePersist
+    public void prePersist() {
+        if (isDeleted == null) {
+            isDeleted = false;
+        }
+    }
 }

@@ -33,8 +33,10 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void deleteById(Integer id) {
-        findEntityById(id);
-        repository.deleteById(id);
+        AddressEntity exist = findEntityById(id);
+        exist.setIsDeleted(true);
+        repository.save(exist);
+
     }
 
     @Override

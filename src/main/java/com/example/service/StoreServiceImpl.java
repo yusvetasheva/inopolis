@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.mapper.AddressMapper;
 import com.example.mapper.StoreMapper;
 import com.example.model.dto.StoreDTO;
+import com.example.model.entity.AddressEntity;
 import com.example.model.entity.StoreEntity;
 import com.example.repository.StoreRepository;
 import lombok.AccessLevel;
@@ -34,8 +35,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public void deleteById(Integer id) {
-        getEntityById(id);
-        repository.deleteById(id);
+        StoreEntity exist = getEntityById(id);
+        exist.setIsDeleted(true);
+        repository.save(exist);
     }
 
     @Override
