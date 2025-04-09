@@ -1,8 +1,17 @@
 com.example
 com.example.controller
+com.example.courses
+com.example.courses.controller
+com.example.courses.mapper
+com.example.courses.model
+com.example.courses.model.dto
+com.example.courses.model.entity
+com.example.courses.repository
+com.example.courses.service
 com.example.mapper
 com.example.model
 com.example.model.dto
 com.example.model.entity
 com.example.repository
+com.example.security
 com.example.service
