@@ -21,7 +21,7 @@ public class SellerEntity {
     @Enumerated(EnumType.STRING)
     Position currPosition;
     @OneToOne(fetch = FetchType.LAZY, targetEntity = ShopEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "shop_id")
     ShopEntity shop;
     Double salary;
 }

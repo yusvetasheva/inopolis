@@ -1,29 +1,60 @@
 package com.example.service;
 
+import com.example.mapper.AddressMapper;
 import com.example.model.dto.AddressDTO;
+import com.example.model.entity.AddressEntity;
+import com.example.repository.AddressRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-public class AddressServiceImpl implements AddressService{
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+@Transactional
+public class AddressServiceImpl implements AddressService {
+
+    AddressRepository repository;
+    AddressMapper mapper;
+
     @Override
+    @Transactional(readOnly = true)
     public Optional<AddressDTO> getById(Integer id) {
-        return Optional.empty();
+        AddressEntity exist = findEntityById(id);
+        return Optional.of(mapper.entityToDto(exist));
     }
 
     @Override
     public void deleteById(Integer id) {
-
+        findEntityById(id);
+        repository.deleteById(id);
     }
 
     @Override
     public AddressDTO create(AddressDTO address) {
-        return null;
+        AddressEntity newAddress = repository.save(mapper.dtoToEntity(address));
+        return mapper.entityToDto(newAddress);
     }
 
     @Override
     public AddressDTO update(Integer id, AddressDTO updatedAddress) {
-        return null;
+        AddressEntity exist = findEntityById(id);
+
+        if (updatedAddress.getCity() != null) exist.setCity(updatedAddress.getCity());
+        if (updatedAddress.getStreet() != null) exist.setStreet(updatedAddress.getStreet());
+        if (updatedAddress.getNumberOfBuild() != null) exist.setNumberOfBuild(updatedAddress.getNumberOfBuild());
+
+        AddressEntity updated = repository.save(exist);
+        return mapper.entityToDto(updated);
+    }
+
+    private AddressEntity findEntityById(Integer id){
+        return repository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("Не найден адрес с id = " + id));
     }
 }
