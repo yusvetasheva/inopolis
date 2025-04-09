@@ -9,6 +9,8 @@ import com.example.repository.ShopRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +56,11 @@ public class ShopServiceImpl implements ShopService {
         ShopEntity updated = repository.save(exist);
 
         return mapper.entityToDto(updated);
+    }
+
+    @Override
+    public Page<ShopDTO> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::entityToDto);
     }
 
     private ShopEntity getEntityById(Integer id) {

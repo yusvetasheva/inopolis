@@ -7,6 +7,8 @@ import com.example.repository.ProductRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,8 +53,15 @@ public class ProductServiceImpl implements ProductService {
         return mapper.entityToDto(updated);
     }
 
+    @Override
+    public Page<ProductDTO> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::entityToDto);
+    }
+
     private ProductEntity findEntityById(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Product с id = " + id + "не найден"));
     }
+
+
 }

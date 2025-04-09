@@ -1,7 +1,10 @@
 package com.example.service;
 
 import com.example.model.dto.AddressDTO;
+import com.example.model.entity.AddressEntity;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -42,4 +45,11 @@ public interface AddressService {
      * @throws EntityNotFoundException если адрес с указанным id не найден (опционально)
      */
     AddressDTO update(Integer id, AddressDTO updatedAddress);
+
+    /**
+     * Получает данные всех адресов.
+     *
+     * @return Page, содержащий страницу AddressDTO
+     */
+    Page<AddressDTO> findAll(Pageable pageable);
 }

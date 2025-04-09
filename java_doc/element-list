@@ -1,5 +1,6 @@
 com.example
 com.example.controller
+com.example.mapper
 com.example.model
 com.example.model.dto
 com.example.model.entity

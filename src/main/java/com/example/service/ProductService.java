@@ -1,6 +1,9 @@
 package com.example.service;
 
+import com.example.model.dto.AddressDTO;
 import com.example.model.dto.ProductDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -43,4 +46,11 @@ public interface ProductService {
      * @throws NoSuchElementException в случае, если товар с таким идентификатором не найден
      */
     ProductDTO update(Integer id, ProductDTO updatedProduct);
+
+    /**
+     * Получает данные всех товаров.
+     *
+     * @return Page, содержащий страницу ProductDTO
+     */
+    Page<ProductDTO> findAll(Pageable pageable);
 }

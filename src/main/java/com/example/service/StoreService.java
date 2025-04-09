@@ -1,6 +1,9 @@
 package com.example.service;
 
+import com.example.model.dto.ShopDTO;
 import com.example.model.dto.StoreDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -45,4 +48,11 @@ public interface StoreService {
      * @throws NoSuchElementException в случае, если склад с таким идентификаторам не найден
      */
     StoreDTO update(Integer id, StoreDTO updatedStore);
+
+    /**
+     * Получает данные всех складов.
+     *
+     * @return Page, содержащий страницу StoreDTO
+     */
+    Page<StoreDTO> findAll(Pageable pageable);
 }

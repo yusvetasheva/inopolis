@@ -8,6 +8,8 @@ import com.example.repository.SellerRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +56,11 @@ public class SellerServiceImpl implements SellerService {
         SellerEntity updated = repository.save(exist);
 
         return mapper.entityToDto(updated);
+    }
+
+    @Override
+    public Page<SellerDTO> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::entityToDto);
     }
 
     private SellerEntity findEntityById(Integer id) {
