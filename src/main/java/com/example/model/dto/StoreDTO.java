@@ -1,26 +1,35 @@
 package com.example.model.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Модель склада
+ * Используется в модели магазина ({@link ShopDTO})
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Schema(description = "Модель склада")
 public class StoreDTO {
-    @Schema(description = "Адрес склада (может совпадать с адресом магазина)")
+    /**
+     * Адрес склада
+     */
     AddressDTO address;
-    @Schema(description = "Вместимость склада в единицах товара", example = "17363")
+    /**
+     * Вместимость склада в единицах товара
+     */
     Integer capacity;
-    @Schema(description = "Текущая заполненность склада в единицах товара", example = "183")
+    /**
+     * Заполненность склада в единицах товара
+     */
     Integer fullness;
-    @Schema(description = "Список товаров, хранимых на складе")
+    /**
+     * Набор товаров, хранимых на складе
+     */
     List<ProductDTO> products = new ArrayList<>();
 }

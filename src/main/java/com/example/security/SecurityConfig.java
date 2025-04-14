@@ -10,6 +10,28 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Конфигурация безопасности приложения.
+ * <p>
+ * Настраивает HTTP-безопасность с использованием ролей и базовой аутентификации.
+ * Также определяет пользователей в памяти с различными ролями:
+ * <ul>
+ *     <li>{@code ADMIN}</li>
+ *     <li>{@code USER}</li>
+ *     <li>{@code VIEWER}</li>
+ * </ul>
+ * </p>
+ *
+ * <p><b>Правила доступа:</b></p>
+ * <ul>
+ *     <li>GET-запросы — разрешены для ролей VIEWER, USER, ADMIN</li>
+ *     <li>POST, DELETE — только для ADMIN</li>
+ *     <li>PUT — для USER и ADMIN</li>
+ *     <li>Все остальные запросы — требуют авторизации</li>
+ * </ul>
+ *
+ * @author Иван
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -30,6 +52,11 @@ public class SecurityConfig {
 
     }
 
+    /**
+     * Определяет пользователей и их роли в памяти.
+     *
+     * @return {@link UserDetailsService} с предопределёнными пользователями
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();

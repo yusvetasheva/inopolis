@@ -1,21 +1,28 @@
 package com.example.model.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.example.model.entity.StoreEntity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * DTO для передачи информации о товаре
+ * Используется в модели склада ({@link StoreEntity})
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Schema(description = "Модель товара")
 public class ProductDTO {
+    /**
+     * Название товара
+     * */
     @NotBlank(message = "name не может быть пустым у Product")
-    @Schema(description = "Название товара", example = "Ноутбук")
     String name;
+    /**
+     * Описание товара
+     * */
     @NotBlank(message = "name не может быть пустым у Product")
-    @Schema(description = "Описание товара", example = "Новый, дорогой")
     String description;
 }
