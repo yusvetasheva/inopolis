@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Schema(description = "Модель адреса")
+@Builder
 public class AddressDTO {
     @NotBlank(message = "city не может быть пустым у Address")
     @Pattern(regexp = "^[^0-9]*$", message = "city не может содержать цифр")

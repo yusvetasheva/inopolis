@@ -23,9 +23,6 @@ public class ShopEntity {
     @OneToOne(fetch = FetchType.LAZY, targetEntity = AddressEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     AddressEntity address;
-    @OneToOne(fetch = FetchType.LAZY, targetEntity = StoreEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_id")
-    StoreEntity store;
     @Column(name = "is_deleted")
     Boolean isDeleted = false;
 

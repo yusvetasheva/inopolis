@@ -62,8 +62,8 @@ public class AddressServiceImpl implements AddressService {
         return repository.findAll(pageable).map(mapper::entityToDto);
     }
 
-    private AddressEntity findEntityById(Integer id){
+    private AddressEntity findEntityById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(()->new NoSuchElementException("Не найден адрес с id = " + id));
+                .orElseThrow(() -> new NoSuchElementException("Не найден адрес с id = " + id));
     }
 }

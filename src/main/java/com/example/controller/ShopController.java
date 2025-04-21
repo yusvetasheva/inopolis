@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.model.dto.SellerDTO;
 import com.example.model.dto.ShopDTO;
 import com.example.service.ShopService;
 import io.swagger.v3.oas.annotations.Operation;

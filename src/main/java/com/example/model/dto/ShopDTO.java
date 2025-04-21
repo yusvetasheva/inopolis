@@ -17,6 +17,4 @@ public class ShopDTO {
     String shopName;
     @Schema(description = "Адрес магазина")
     AddressDTO address;
-    @Schema(description = "Склад магазина")
-    StoreDTO store;
 }

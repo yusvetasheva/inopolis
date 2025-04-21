@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-14T21:25:10+0300",
+    date = "2025-04-21T13:52:27+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.13 (Amazon.com Inc.)"
 )
 @Component
@@ -19,13 +19,13 @@ public class AddressMapperImpl implements AddressMapper {
             return null;
         }
 
-        AddressDTO addressDTO = new AddressDTO();
+        AddressDTO.AddressDTOBuilder addressDTO = AddressDTO.builder();
 
-        addressDTO.setCity( entity.getCity() );
-        addressDTO.setStreet( entity.getStreet() );
-        addressDTO.setNumberOfBuild( entity.getNumberOfBuild() );
+        addressDTO.city( entity.getCity() );
+        addressDTO.street( entity.getStreet() );
+        addressDTO.numberOfBuild( entity.getNumberOfBuild() );
 
-        return addressDTO;
+        return addressDTO.build();
     }
 
     @Override
