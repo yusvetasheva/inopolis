@@ -121,6 +121,31 @@
                     <destDir>${project.build.directory}/custom-apidocs</destDir>
                 </configuration>
             </plugin>
+
+            <!-- Чтобы узнать процент покрытия тестами -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.10</version>
+                <executions>
+                    <!-- Обязательно перед тестами -->
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <phase>initialize</phase> <!-- Добавь эту строку -->
+                    </execution>
+                    <!-- Отчёт генерируем на verify -->
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
