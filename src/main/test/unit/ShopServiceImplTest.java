@@ -1,3 +1,5 @@
+package unit;
+
 import com.example.mapper.ShopMapper;
 import com.example.model.dto.AddressDTO;
 import com.example.model.dto.ShopDTO;
@@ -5,7 +7,6 @@ import com.example.model.entity.AddressEntity;
 import com.example.model.entity.ShopEntity;
 import com.example.repository.ShopRepository;
 import com.example.service.ShopServiceImpl;
-import jakarta.validation.constraints.AssertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static java.util.Collections.sort;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
