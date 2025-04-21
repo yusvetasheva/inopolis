@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "Address")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddressEntity {

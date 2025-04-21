@@ -63,6 +63,6 @@ public class ShopServiceImpl implements ShopService {
 
     private ShopEntity getEntityById(Integer id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Shop с id = " + id + " не найден"));
+                .orElseThrow(() -> new NoSuchElementException("Не найден магазин с id = " + id));
     }
 }
