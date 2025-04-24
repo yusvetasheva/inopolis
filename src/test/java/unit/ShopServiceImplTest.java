@@ -14,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -85,7 +87,7 @@ public class ShopServiceImplTest {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> service.getById(1));
 
-        assertTrue(ex.getMessage().contains("Не найден магазин с id ="));
+        assertThat(ex.getMessage(), containsString("Не найден магазин с id ="));
         verify(repository).findById(1);
     }
 
@@ -96,7 +98,7 @@ public class ShopServiceImplTest {
 
         service.deleteById(1);
 
-        assertTrue(entity.getIsDeleted());
+        assertThat(entity.getIsDeleted(), is(true));
         verify(repository).findById(1);
         verify(repository).save(entity);
     }
@@ -108,7 +110,7 @@ public class ShopServiceImplTest {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> service.deleteById(1));
 
-        assertTrue(ex.getMessage().contains("Не найден магазин с id ="));
+        assertThat(ex.getMessage(), containsString("Не найден магазин с id ="));
         verify(repository).findById(1);
     }
 
@@ -150,7 +152,7 @@ public class ShopServiceImplTest {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 ()->service.update(1, updateDto));
 
-        assertTrue(ex.getMessage().contains("Не найден магазин с id ="));
+        assertThat(ex.getMessage(), containsString("Не найден магазин с id ="));
         verify(repository).findById(1);
     }
 

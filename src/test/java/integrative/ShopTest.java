@@ -21,7 +21,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -54,30 +55,30 @@ public class ShopTest {
 
         assertTrue(result.isPresent());
         assertEquals(saved.getShopName(), result.get().getShopName());
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(repository.findAll(), hasSize(1));
     }
 
     @Test
-    public void getById_noSuchElement(){
-        assertThatThrownBy(()->service.getById(1))
+    public void getById_noSuchElement() {
+        assertThatThrownBy(() -> service.getById(1))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Не найден магазин с id = 1");
     }
 
     @Test
-    public void deleteById_SuccessTest(){
+    public void deleteById_SuccessTest() {
         ShopEntity saved = ShopEntity.builder().shopName("name").build();
         saved = repository.save(saved);
 
         service.deleteById(saved.getId());
 
-        assertTrue(saved.getIsDeleted());
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(saved.getIsDeleted(), is(true));
+        assertThat(repository.findAll(), hasSize(1));
     }
 
     @Test
-    public void deleteById_NoSuchElement(){
-        assertThatThrownBy(()->service.deleteById(999))
+    public void deleteById_NoSuchElement() {
+        assertThatThrownBy(() -> service.deleteById(999))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Не найден магазин с id = 999")
         ;
@@ -85,14 +86,14 @@ public class ShopTest {
 
 
     @Test
-    public void update_NoSuchElement(){
-        assertThatThrownBy(()->service.update(1, ShopDTO.builder().build()))
+    public void update_NoSuchElement() {
+        assertThatThrownBy(() -> service.update(1, ShopDTO.builder().build()))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Не найден магазин с id = 1");
     }
 
     @Test
-    public void findAll_SuccessTest(){
+    public void findAll_SuccessTest() {
         IntStream.rangeClosed(1, 2).forEach(i -> {
             ShopDTO dto = ShopDTO.builder().shopName("name").build();
             service.create(dto);
@@ -102,10 +103,10 @@ public class ShopTest {
 
         Page<ShopDTO> result = service.findAll(pageable);
 
-        assertThat(result.getTotalElements()).isEqualTo(2);
-        assertThat(result.getTotalPages()).isEqualTo(2);
+        assertThat(result.getTotalElements(), is(2L));
+        assertThat(result.getTotalPages(), is(2));
 
-        assertThat(result.getContent().get(0).getShopName()).isEqualTo("name");
+        assertThat(result.getContent().get(0).getShopName(), is("name"));
 
     }
 
@@ -117,7 +118,7 @@ public class ShopTest {
 
         assertEquals("name", result.getShopName());
 
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(repository.findAll(), hasSize(1));
     }
 
 }

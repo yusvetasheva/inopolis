@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -61,7 +63,7 @@ public class AddressServiceImplTest {
 
         service.deleteById(1);
 
-        assertTrue(entity.getIsDeleted());
+        assertThat(entity.getIsDeleted(), is(true));
         verify(repository).findById(1);
         verify(repository).save(entity);
     }
@@ -73,7 +75,7 @@ public class AddressServiceImplTest {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> service.deleteById(1));
 
-        assertTrue(ex.getMessage().contains("Не найден адрес с id ="));
+        assertThat(ex.getMessage(),containsString("Не найден адрес с id ="));
         verify(repository).findById(1);
 
     }
@@ -96,7 +98,7 @@ public class AddressServiceImplTest {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> service.getById(1));
 
-        assertTrue(ex.getMessage().contains("Не найден адрес с id ="));
+        assertThat(ex.getMessage(), containsString("Не найден адрес с id ="));
         verify(repository).findById(1);
     }
 
@@ -131,9 +133,9 @@ public class AddressServiceImplTest {
 
         AddressDTO result = service.update(1, updated);
 
-        assertEquals("new city", result.getCity());
-        assertEquals("new street", result.getStreet());
-        assertEquals("new build", result.getNumberOfBuild());
+        assertThat("new city", is(result.getCity()));
+        assertThat("new street", is(result.getStreet()));
+        assertThat("new build", is(result.getNumberOfBuild()));
 
         verify(repository).findById(1);
         verify(repository).save(any(AddressEntity.class));
@@ -147,7 +149,7 @@ public class AddressServiceImplTest {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> service.update(1, dto));
 
-        assertTrue(ex.getMessage().contains("Не найден адрес с id ="));
+        assertThat(ex.getMessage(), containsString("Не найден адрес с id ="));
         verify(repository).findById(1);
     }
 
@@ -164,8 +166,8 @@ public class AddressServiceImplTest {
 
         Page<AddressDTO> result = service.findAll(pageable);
 
-        assertEquals(1, result.getTotalElements());
-        assertEquals(dto, result.getContent().get(0));
+        assertThat(result.getTotalElements(), is(1L));
+        assertThat(dto, is(result.getContent().get(0)));
 
         verify(repository).findAll(pageable);
         verify(mapper).entityToDto(entity);

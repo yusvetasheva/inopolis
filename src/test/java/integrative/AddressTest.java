@@ -21,6 +21,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -58,37 +60,37 @@ public class AddressTest {
         assertEquals(saved.getStreet(), result.get().getStreet());
         assertEquals(saved.getNumberOfBuild(), result.get().getNumberOfBuild());
 
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(repository.findAll(), hasSize(1));
     }
 
     @Test
-    public void getById_noSuchElement(){
-        assertThatThrownBy(()->service.getById(1))
+    public void getById_noSuchElement() {
+        assertThatThrownBy(() -> service.getById(1))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Не найден адрес с id = 1");
     }
 
     @Test
-    public void deleteById_SuccessTest(){
+    public void deleteById_SuccessTest() {
         AddressEntity saved = AddressEntity.builder().street("street").numberOfBuild("1").city("city").build();
         saved = repository.save(saved);
 
         service.deleteById(saved.getId());
 
         assertTrue(saved.getIsDeleted());
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(repository.findAll(), hasSize(1));
     }
 
     @Test
-    public void deleteById_NoSuchElement(){
-        assertThatThrownBy(()->service.deleteById(999))
+    public void deleteById_NoSuchElement() {
+        assertThatThrownBy(() -> service.deleteById(999))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Не найден адрес с id = 999")
         ;
     }
 
     @Test
-    public void update_SuccessTest(){
+    public void update_SuccessTest() {
         AddressDTO updated = AddressDTO.builder()
                 .numberOfBuild("new build")
                 .city("new city")
@@ -109,18 +111,18 @@ public class AddressTest {
         assertEquals("new build", result.getNumberOfBuild());
         assertEquals("new street", result.getStreet());
 
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(repository.findAll(), hasSize(1));
     }
 
     @Test
-    public void update_NoSuchElement(){
-        assertThatThrownBy(()->service.update(1, AddressDTO.builder().build()))
+    public void update_NoSuchElement() {
+        assertThatThrownBy(() -> service.update(1, AddressDTO.builder().build()))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Не найден адрес с id = 1");
     }
 
     @Test
-    public void findAll_SuccessTest(){
+    public void findAll_SuccessTest() {
         IntStream.rangeClosed(1, 2).forEach(i -> {
             AddressDTO dto = new AddressDTO("C" + i, "S" + i, String.valueOf(i));
             service.create(dto);
@@ -130,12 +132,12 @@ public class AddressTest {
 
         Page<AddressDTO> result = service.findAll(pageable);
 
-        assertThat(result.getTotalElements()).isEqualTo(2);
-        assertThat(result.getTotalPages()).isEqualTo(2);
+        assertThat(result.getTotalElements(), is(2L));
+        assertThat(result.getTotalPages(), is(2));
 
-        assertThat(result.getContent().get(0).getCity()).isEqualTo("C1");
-        assertThat(result.getContent().get(0).getStreet()).isEqualTo("S1");
-        assertThat(result.getContent().get(0).getNumberOfBuild()).isEqualTo("1");
+        assertThat(result.getContent().get(0).getCity(), is("C1"));
+        assertThat(result.getContent().get(0).getStreet(), is("S1"));
+        assertThat(result.getContent().get(0).getNumberOfBuild(), is("1"));
 
     }
 
@@ -149,7 +151,7 @@ public class AddressTest {
         assertEquals("street", result.getStreet());
         assertEquals("1", result.getNumberOfBuild());
 
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(repository.findAll(), hasSize(1));
     }
 
 }
