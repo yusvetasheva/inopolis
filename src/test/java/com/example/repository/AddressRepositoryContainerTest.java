@@ -3,8 +3,6 @@ package com.example.repository;
 import com.example.model.entity.AddressEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
 

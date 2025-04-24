@@ -1,4 +1,4 @@
-package integrative;
+package com.example.service.integrative;
 
 import com.example.App;
 import com.example.model.dto.ShopDTO;

@@ -1,4 +1,4 @@
-package unit;
+package com.example.service.unit;
 
 import com.example.mapper.ShopMapper;
 import com.example.model.dto.AddressDTO;
