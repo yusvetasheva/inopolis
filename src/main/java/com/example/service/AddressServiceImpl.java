@@ -7,6 +7,9 @@ import com.example.repository.AddressRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,12 +29,14 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "address", key = "#id")
     public Optional<AddressDTO> getById(Integer id) {
         AddressEntity exist = findEntityById(id);
         return Optional.of(mapper.entityToDto(exist));
     }
 
     @Override
+    @CacheEvict(value = "address", key = "#id")
     public void deleteById(Integer id) {
         AddressEntity exist = findEntityById(id);
         exist.setIsDeleted(true);
@@ -40,12 +45,14 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @CachePut(value = "address", key = "#result.id")
     public AddressDTO create(AddressDTO address) {
         AddressEntity newAddress = repository.save(mapper.dtoToEntity(address));
         return mapper.entityToDto(newAddress);
     }
 
     @Override
+    @CachePut(value = "address", key = "#id") // Обновим кэш
     public AddressDTO update(Integer id, AddressDTO updatedAddress) {
         AddressEntity exist = findEntityById(id);
 
@@ -58,6 +65,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Cacheable(value = "address", key = "T(String).valueOf(#pageable.pageNumber) + '-' + T(String).valueOf(#pageable.pageSize) + '-' + #pageable.sort.toString()")
     public Page<AddressDTO> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::entityToDto);
     }

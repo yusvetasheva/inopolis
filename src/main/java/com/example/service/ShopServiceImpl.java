@@ -8,6 +8,9 @@ import com.example.repository.ShopRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,11 +31,13 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "shop", key = "#id")
     public Optional<ShopDTO> getById(Integer id) {
         return Optional.of(mapper.entityToDto(getEntityById(id)));
     }
 
     @Override
+    @CacheEvict(value = "shop", key = "#id")
     public void deleteById(Integer id) {
         ShopEntity exist = getEntityById(id);
         exist.setIsDeleted(true);
@@ -40,11 +45,13 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    @CachePut(value = "shop", key = "#result.id")
     public ShopDTO create(ShopDTO seller) {
         return mapper.entityToDto(repository.save(mapper.dtoToEntity(seller)));
     }
 
     @Override
+    @CachePut(value = "shop", key = "#id")
     public ShopDTO update(Integer id, ShopDTO updatedShop) {
         ShopEntity exist = getEntityById(id);
 
@@ -57,6 +64,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    @Cacheable(value = "shop", key = "T(String).valueOf(#pageable.pageNumber) + '-' + T(String).valueOf(#pageable.pageSize) + '-' + #pageable.sort.toString()")
     public Page<ShopDTO> findAll(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::entityToDto);
     }
