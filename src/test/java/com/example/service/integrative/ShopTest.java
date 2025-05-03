@@ -99,7 +99,7 @@ public class ShopTest {
             service.create(dto);
         });
 
-        Pageable pageable = PageRequest.of(0, 1, Sort.by("id"));
+        Pageable pageable = PageRequest.of(0, 1);
 
         Page<ShopDTO> result = service.findAll(pageable);
 
