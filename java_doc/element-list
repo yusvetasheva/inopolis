@@ -1,0 +1,12 @@
+com.example
+com.example.config
+com.example.controller
+com.example.mapper
+com.example.model
+com.example.model.dto
+com.example.model.entity
+com.example.repository
+com.example.security
+com.example.service
+com.example.service.integrative
+com.example.service.unit
