@@ -7,6 +7,7 @@ import com.example.repository.AddressRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,12 +27,14 @@ public class AddressServiceImpl implements AddressService {
 
     AddressRepository repository;
     AddressMapper mapper;
+    RabbitTemplate rabbitTemplate;
 
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = "address", key = "#id")
     public Optional<AddressDTO> getById(Integer id) {
         AddressEntity exist = findEntityById(id);
+        rabbitTemplate.convertAndSend("events_queue", "AddressServiceImpl.getById был вызван для id = " + id);
         return Optional.of(mapper.entityToDto(exist));
     }
 
@@ -41,6 +44,7 @@ public class AddressServiceImpl implements AddressService {
         AddressEntity exist = findEntityById(id);
         exist.setIsDeleted(true);
         repository.save(exist);
+        rabbitTemplate.convertAndSend("events_queue", "AddressServiceImpl.deleteById был вызван для id = " + id);
 
     }
 
@@ -48,6 +52,7 @@ public class AddressServiceImpl implements AddressService {
     @CachePut(value = "address", key = "#result.id")
     public AddressDTO create(AddressDTO address) {
         AddressEntity newAddress = repository.save(mapper.dtoToEntity(address));
+        rabbitTemplate.convertAndSend("events_queue", "AddressServiceImpl.create был вызван для id = " + newAddress.getId());
         return mapper.entityToDto(newAddress);
     }
 
@@ -61,6 +66,7 @@ public class AddressServiceImpl implements AddressService {
         if (updatedAddress.getNumberOfBuild() != null) exist.setNumberOfBuild(updatedAddress.getNumberOfBuild());
 
         AddressEntity updated = repository.save(exist);
+        rabbitTemplate.convertAndSend("events_queue", "AddressServiceImpl.create был вызван для id = " + id);
         return mapper.entityToDto(updated);
     }
 
@@ -71,6 +77,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     private AddressEntity findEntityById(Integer id) {
+        rabbitTemplate.convertAndSend("events_queue", "AddressServiceImpl.findEntityById был вызван для id = " + id);
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Не найден адрес с id = " + id));
     }
