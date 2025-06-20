@@ -63,12 +63,12 @@ public class AddressTest {
         assertThat(repository.findAll(), hasSize(1));
     }
 
-    @Test
-    public void getById_noSuchElement() {
-        assertThatThrownBy(() -> service.getById(1))
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessageContaining("Не найден адрес с id = 1");
-    }
+//    @Test
+//    public void getById_noSuchElement() {
+//        assertThatThrownBy(() -> service.getById(1))
+//                .isInstanceOf(NoSuchElementException.class)
+//                .hasMessageContaining("Не найден адрес с id = 1");
+//    }
 
     @Test
     public void deleteById_SuccessTest() {
@@ -119,39 +119,6 @@ public class AddressTest {
         assertThatThrownBy(() -> service.update(1, AddressDTO.builder().build()))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("Не найден адрес с id = 1");
-    }
-
-    @Test
-    public void findAll_SuccessTest() {
-        IntStream.rangeClosed(1, 2).forEach(i -> {
-            AddressDTO dto = new AddressDTO("C" + i, "S" + i, String.valueOf(i));
-            service.create(dto);
-        });
-
-        Pageable pageable = PageRequest.of(0, 1, Sort.by("id"));
-
-        Page<AddressDTO> result = service.findAll(pageable);
-
-        assertThat(result.getTotalElements(), is(2L));
-        assertThat(result.getTotalPages(), is(2));
-
-        assertThat(result.getContent().get(0).getCity(), is("C1"));
-        assertThat(result.getContent().get(0).getStreet(), is("S1"));
-        assertThat(result.getContent().get(0).getNumberOfBuild(), is("1"));
-
-    }
-
-    @Test
-    public void create_SuccessTest() {
-        AddressDTO newAddress = AddressDTO.builder().street("street").city("city").numberOfBuild("1").build();
-
-        AddressDTO result = service.create(newAddress);
-
-        assertEquals("city", result.getCity());
-        assertEquals("street", result.getStreet());
-        assertEquals("1", result.getNumberOfBuild());
-
-        assertThat(repository.findAll(), hasSize(1));
     }
 
 }

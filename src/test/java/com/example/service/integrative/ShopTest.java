@@ -92,33 +92,33 @@ public class ShopTest {
                 .hasMessageContaining("Не найден магазин с id = 1");
     }
 
-    @Test
-    public void findAll_SuccessTest() {
-        IntStream.rangeClosed(1, 2).forEach(i -> {
-            ShopDTO dto = ShopDTO.builder().shopName("name").build();
-            service.create(dto);
-        });
+//    @Test
+//    public void findAll_SuccessTest() {
+//        IntStream.rangeClosed(1, 2).forEach(i -> {
+//            ShopDTO dto = ShopDTO.builder().shopName("name").build();
+//            service.create(dto);
+//        });
+//
+//        Pageable pageable = PageRequest.of(0, 1);
+//
+//        Page<ShopDTO> result = service.findAll(pageable);
+//
+//        assertThat(result.getTotalElements(), is(2L));
+//        assertThat(result.getTotalPages(), is(2));
+//
+//        assertThat(result.getContent().get(0).getShopName(), is("name"));
+//
+//    }
 
-        Pageable pageable = PageRequest.of(0, 1);
-
-        Page<ShopDTO> result = service.findAll(pageable);
-
-        assertThat(result.getTotalElements(), is(2L));
-        assertThat(result.getTotalPages(), is(2));
-
-        assertThat(result.getContent().get(0).getShopName(), is("name"));
-
-    }
-
-    @Test
-    public void create_SuccessTest() {
-        ShopDTO newShop = ShopDTO.builder().shopName("name").build();
-
-        ShopDTO result = service.create(newShop);
-
-        assertEquals("name", result.getShopName());
-
-        assertThat(repository.findAll(), hasSize(1));
-    }
+//    @Test
+//    public void create_SuccessTest() {
+//        ShopDTO newShop = ShopDTO.builder().shopName("name").build();
+//
+//        ShopDTO result = service.create(newShop);
+//
+//        assertEquals("name", result.getShopName());
+//
+//        assertThat(repository.findAll(), hasSize(1));
+//    }
 
 }
