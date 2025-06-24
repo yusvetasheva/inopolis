@@ -1,6 +1,6 @@
 package com.example.inopolis.repository;
 
-import com.example.inopolis.model.entity.business.StudentEntity;
+import com.example.inopolis.model.entity.StudentEntity;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;

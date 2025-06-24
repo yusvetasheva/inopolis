@@ -22,6 +22,4 @@ public interface StudentService {
 
     Mono<String> addCourseToStudent(AddCourseToStudentRequest request);
 
-    //Mono<CourseDTO> addCommentToCourse(AddCommentToCourseRequest request);
-
 }

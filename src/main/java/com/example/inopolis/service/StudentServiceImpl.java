@@ -1,12 +1,11 @@
 package com.example.inopolis.service;
 
 import com.example.courses.model.dto.CourseDTO;
-import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.client.CourseRestClientApi;
 import com.example.inopolis.mapper.StudentMapper;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.dto.StudentDTO;
-import com.example.inopolis.model.entity.business.StudentEntity;
+import com.example.inopolis.model.entity.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    StudentMapper studentMapper = StudentMapper.INSTANCE;
+    StudentMapper studentMapper;
 
     StudentRepository repository;
 
@@ -112,11 +111,5 @@ public class StudentServiceImpl implements StudentService {
         return Mono.empty();
 
     }
-
-//    @Override
-//    public Mono<CourseDTO> addCommentToCourse(AddCommentToCourseRequest request) {
-//
-//        return Mono.just(restClient.addCommentToCourse(request));
-//    }
 
 }

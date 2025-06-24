@@ -9,9 +9,7 @@ import reactor.core.publisher.Flux;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class DynamicRouteDefinitionLocator implements RouteDefinitionLocator {

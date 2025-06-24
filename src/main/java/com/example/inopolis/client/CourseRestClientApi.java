@@ -5,6 +5,4 @@ import com.example.courses.model.AddCommentToCourseRequest;
 
 public interface CourseRestClientApi {
     CourseDTO checkCourseIsExist(String courseName);
-
-    CourseDTO addCommentToCourse(AddCommentToCourseRequest request);
 }

@@ -1,4 +1,4 @@
-package com.example.inopolis.model.entity.business;
+package com.example.inopolis.model.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
