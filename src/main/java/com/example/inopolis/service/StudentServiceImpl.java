@@ -8,6 +8,9 @@ import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.dto.StudentDTO;
 import com.example.inopolis.model.entity.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -17,18 +20,15 @@ import java.util.*;
 
 @Slf4j
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentMapper studentMapper = StudentMapper.INSTANCE;
+    StudentMapper studentMapper = StudentMapper.INSTANCE;
 
-    private final StudentRepository repository;
+    StudentRepository repository;
 
-    private final CourseRestClientApi restClient;
-
-    public StudentServiceImpl(StudentRepository repository, CourseRestClientApi restClient) {
-        this.repository = repository;
-        this.restClient = restClient;
-    }
+    CourseRestClientApi restClient;
 
     @Override
     public Flux<StudentDTO> getAllStudents() {
@@ -84,12 +84,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Mono<String> addCourseToStudent(AddCourseToStudentRequest request) {
-        if (request.getStudentId() == null)
-             throw new IllegalArgumentException("studentId в методе addCourseToStudent не может быть null");
-        if (request.getCourse() == null || request.getCourse().isEmpty())
-            throw new IllegalArgumentException("course в методе addCourseToStudent не может быть null/empty");
-
-        String result = "";
 
         repository.findById(request.getStudentId())
                 .switchIfEmpty(Mono.error(new NoSuchElementException("Нет студента с id = " + request.getStudentId())))
