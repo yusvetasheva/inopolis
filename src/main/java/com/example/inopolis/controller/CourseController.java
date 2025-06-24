@@ -27,11 +27,11 @@ public class CourseController {
         return service.addCourseToStudent(request).map(ResponseEntity::ok);
     }
 
-    @PostMapping(value = "/add-comment")
-    public Mono<ResponseEntity<CourseDTO>> addCommentToCourse(@RequestBody @Valid AddCommentToCourseRequest request) {
-        return service.addCommentToCourse(request)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound()
-                        .build());
-    }
+//    @PostMapping(value = "/add-comment")
+//    public Mono<ResponseEntity<CourseDTO>> addCommentToCourse(@RequestBody @Valid AddCommentToCourseRequest request) {
+//        return service.addCommentToCourse(request)
+//                .map(ResponseEntity::ok)
+//                .defaultIfEmpty(ResponseEntity.notFound()
+//                        .build());
+//    }
 }

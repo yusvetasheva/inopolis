@@ -6,7 +6,7 @@ import com.example.inopolis.client.CourseRestClientApi;
 import com.example.inopolis.mapper.StudentMapper;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.dto.StudentDTO;
-import com.example.inopolis.model.entity.StudentEntity;
+import com.example.inopolis.model.entity.business.StudentEntity;
 import com.example.inopolis.repository.StudentRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -113,10 +113,10 @@ public class StudentServiceImpl implements StudentService {
 
     }
 
-    @Override
-    public Mono<CourseDTO> addCommentToCourse(AddCommentToCourseRequest request) {
-
-        return Mono.just(restClient.addCommentToCourse(request));
-    }
+//    @Override
+//    public Mono<CourseDTO> addCommentToCourse(AddCommentToCourseRequest request) {
+//
+//        return Mono.just(restClient.addCommentToCourse(request));
+//    }
 
 }
