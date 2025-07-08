@@ -1,7 +1,5 @@
 package com.example.inopolis.service;
 
-import com.example.courses.model.dto.CourseDTO;
-import com.example.courses.model.AddCommentToCourseRequest;
 import com.example.inopolis.model.AddCourseToStudentRequest;
 import com.example.inopolis.model.dto.StudentDTO;
 import reactor.core.publisher.Flux;
