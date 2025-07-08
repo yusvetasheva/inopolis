@@ -1,6 +1,6 @@
 package com.example.inopolis.service;
 
-import com.example.courses.model.dto.CourseDTO;
+//import com.example.courses.model.dto.CourseDTO;
 import com.example.inopolis.client.CourseRestClientApi;
 import com.example.inopolis.mapper.StudentMapper;
 import com.example.inopolis.model.AddCourseToStudentRequest;
@@ -81,35 +81,35 @@ public class StudentServiceImpl implements StudentService {
         return existStudent.map(studentMapper::entityToDto);
     }
 
-    @Override
-    public Mono<String> addCourseToStudent(AddCourseToStudentRequest request) {
-
-        repository.findById(request.getStudentId())
-                .switchIfEmpty(Mono.error(new NoSuchElementException("Нет студента с id = " + request.getStudentId())))
-                .flatMap(exist->{
-
-                    CourseDTO existCourse = null;
-                    try {
-                        existCourse = restClient.checkCourseIsExist(request.getCourse());
-                    } catch (Exception e) {
-                        log.error(e.getMessage());
-                    }
-
-                    if (existCourse != null && existCourse.getIsActive()) {
-
-                        //Если студент уже записан на данный курс, выводим об этом сообщение
-                        //Если нет - добавляем курс студенту
-                        if (exist.getCourses().contains(request.getCourse()))
-                            return Mono.just("Повтор");
-
-                        exist.getCourses().add(request.getCourse());
-                        repository.save(exist);
-                        return Mono.just("Успех");
-                    } else return Mono.just("Данный курс не активен");
-                });
-
-        return Mono.empty();
-
-    }
+//    @Override
+//    public Mono<String> addCourseToStudent(AddCourseToStudentRequest request) {
+//
+//        repository.findById(request.getStudentId())
+//                .switchIfEmpty(Mono.error(new NoSuchElementException("Нет студента с id = " + request.getStudentId())))
+//                .flatMap(exist->{
+//
+//                    CourseDTO existCourse = null;
+//                    try {
+//                        existCourse = restClient.checkCourseIsExist(request.getCourse());
+//                    } catch (Exception e) {
+//                        log.error(e.getMessage());
+//                    }
+//
+//                    if (existCourse != null && existCourse.getIsActive()) {
+//
+//                        //Если студент уже записан на данный курс, выводим об этом сообщение
+//                        //Если нет - добавляем курс студенту
+//                        if (exist.getCourses().contains(request.getCourse()))
+//                            return Mono.just("Повтор");
+//
+//                        exist.getCourses().add(request.getCourse());
+//                        repository.save(exist);
+//                        return Mono.just("Успех");
+//                    } else return Mono.just("Данный курс не активен");
+//                });
+//
+//        return Mono.empty();
+//
+//    }
 
 }

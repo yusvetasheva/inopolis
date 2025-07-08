@@ -1,10 +1,8 @@
 package com.example.inopolis.client;
 
-import com.example.courses.model.dto.CourseDTO;
-import com.example.courses.model.AddCommentToCourseRequest;
+//import com.example.courses.model.dto.CourseDTO;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -20,13 +18,13 @@ public class CourseRestClientImpl implements CourseRestClientApi {
                 .build();
     }
 
-    @Override
-    public CourseDTO checkCourseIsExist(String courseName) {
-
-        return restClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/get-by-name")
-                        .queryParam("name", courseName).build())
-                .retrieve()
-                .body(CourseDTO.class);
-    }
+//    @Override
+//    public CourseDTO checkCourseIsExist(String courseName) {
+//
+//        return restClient.get()
+//                .uri(uriBuilder -> uriBuilder.path("/get-by-name")
+//                        .queryParam("name", courseName).build())
+//                .retrieve()
+//                .body(CourseDTO.class);
+//    }
 }

@@ -18,6 +18,6 @@ public interface StudentService {
 
     Mono<StudentDTO> deleteStudent(Integer id);
 
-    Mono<String> addCourseToStudent(AddCourseToStudentRequest request);
+    //Mono<String> addCourseToStudent(AddCourseToStudentRequest request);
 
 }

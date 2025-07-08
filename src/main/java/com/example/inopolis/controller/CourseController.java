@@ -19,9 +19,9 @@ public class CourseController {
 
     StudentService service;
 
-    @AroundAnnotation
-    @PostMapping(value = "/add-course")
-    public Mono<ResponseEntity<String>> addCourseToStudent(@RequestBody @Valid AddCourseToStudentRequest request) {
-        return service.addCourseToStudent(request).map(ResponseEntity::ok);
-    }
+//    @AroundAnnotation
+//    @PostMapping(value = "/add-course")
+//    public Mono<ResponseEntity<String>> addCourseToStudent(@RequestBody @Valid AddCourseToStudentRequest request) {
+//        return service.addCourseToStudent(request).map(ResponseEntity::ok);
+//    }
 }
